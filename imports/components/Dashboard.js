@@ -167,7 +167,7 @@ class Dashboard extends React.Component {
             <div className='sign-out'>
               <AccountsUIWrapper />
             </div>
-            <Notes />
+            <Notes notes={this.props.notes} user={this.props.user}/>
           </div>
         </div>
         <div className='bottom'>
