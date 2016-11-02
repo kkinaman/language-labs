@@ -9,6 +9,7 @@ import TopicSuggestion   from './TopicSuggestion';
 import Review            from './Review';
 import Waiting           from './Waiting';
 import Welcome           from './Welcome';
+import Notes             from './Notes';
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -164,7 +165,7 @@ class Dashboard extends React.Component {
             <div className='sign-out'>
               <AccountsUIWrapper />
             </div>
-            <UserProfile user={this.props.user}/>
+            <Notes />
           </div>
         </div>
         <div className='bottom'>
