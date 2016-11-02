@@ -32,7 +32,7 @@
 // ______________________
 // MediaStreamRecorder.js
 
-function MediaStreamRecorder(mediaStream) {
+module.exports = function(mediaStream) {
     if (!mediaStream) {
         throw 'MediaStream is mandatory.';
     }
@@ -42,8 +42,9 @@ function MediaStreamRecorder(mediaStream) {
     this.start = function (timeSlice) {
         // Media Stream Recording API has not been implemented in chrome yet;
         // That's why using WebAudio API to record stereo audio in WAV format
-        var Recorder = IsChrome || IsEdge || IsOpera ? window.StereoAudioRecorder || IsEdge || IsOpera : window.MediaRecorderWrapper;
+        // var Recorder = IsChrome || IsEdge || IsOpera ? window.StereoAudioRecorder || IsEdge || IsOpera : window.MediaRecorderWrapper;
         
+        var Recorder = window.StereoAudioRecorder;
         // video recorder (in WebM format)
         if (this.mimeType.indexOf('video') !== -1) {
             Recorder = IsChrome || IsEdge || IsOpera ? window.WhammyRecorder : window.MediaRecorderWrapper;
@@ -282,17 +283,17 @@ if (typeof URL !== 'undefined' && typeof webkitURL !== 'undefined') {
     var URL = webkitURL;
 }
 
-var IsEdge = navigator.userAgent.indexOf('Edge') !== -1 && (!!navigator.msSaveBlob || !!navigator.msSaveOrOpenBlob);
-var IsOpera = !!window.opera || navigator.userAgent.indexOf('OPR/') !== -1;
-var IsChrome = !IsEdge && !IsEdge && !!navigator.webkitGetUserMedia;
+var IsEdge = window.navigator.userAgent.indexOf('Edge') !== -1 && (!!window.navigator.msSaveBlob || !!window.navigator.msSaveOrOpenBlob);
+var IsOpera = !!window.opera || window.navigator.userAgent.indexOf('OPR/') !== -1;
+var IsChrome = !IsEdge && !IsEdge && !!window.navigator.webkitGetUserMedia;
 
-if (typeof navigator !== 'undefined') {
-    if (typeof navigator.webkitGetUserMedia !== 'undefined') {
-        navigator.getUserMedia = navigator.webkitGetUserMedia;
+if (typeof window.navigator !== 'undefined') {
+    if (typeof window.navigator.webkitGetUserMedia !== 'undefined') {
+        window.navigator.getUserMedia = window.navigator.webkitGetUserMedia;
     }
     
-    if (typeof navigator.mozGetUserMedia !== 'undefined') {
-        navigator.getUserMedia = navigator.mozGetUserMedia;
+    if (typeof window.navigator.mozGetUserMedia !== 'undefined') {
+        window.navigator.getUserMedia = window.navigator.mozGetUserMedia;
     }
 } else {
     /*global navigator:true */
@@ -358,10 +359,10 @@ function invokeSaveAsDialog(file, fileName) {
     
     var fileFullName = (fileName || (Math.round(Math.random() * 9999999999) + 888888888)) + '.' + fileExtension;
     
-    if (typeof navigator.msSaveOrOpenBlob !== 'undefined') {
-        return navigator.msSaveOrOpenBlob(file, fileFullName);
-    } else if (typeof navigator.msSaveBlob !== 'undefined') {
-        return navigator.msSaveBlob(file, fileFullName);
+    if (typeof window.navigator.msSaveOrOpenBlob !== 'undefined') {
+        return window.navigator.msSaveOrOpenBlob(file, fileFullName);
+    } else if (typeof window.navigator.msSaveBlob !== 'undefined') {
+        return window.navigator.msSaveBlob(file, fileFullName);
     }
     
     var hyperlink = document.createElement('a');
@@ -369,7 +370,7 @@ function invokeSaveAsDialog(file, fileName) {
     hyperlink.target = '_blank';
     hyperlink.download = fileFullName;
     
-    if (!!navigator.mozGetUserMedia) {
+    if (!!window.navigator.mozGetUserMedia) {
         hyperlink.onclick = function () {
             (document.body || document.documentElement).removeChild(hyperlink);
         };
