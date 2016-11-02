@@ -10,6 +10,8 @@ import Review            from './Review';
 import Waiting           from './Waiting';
 import Welcome           from './Welcome';
 import Notes             from './Notes';
+import Transcriber       from './Transcriber';
+
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -170,17 +172,10 @@ class Dashboard extends React.Component {
         </div>
         <div className='bottom'>
           <div className='text-box'>
-            { 
-              this.state.partner &&
-              <div className='clock-suggestion-wrapper'>
-                <Clock partner={this.state.partner} callDone={this.state.callDone} />
-                <TopicSuggestion partner={this.state.partner}/>
-              </div>
-            }
-            {
-              !this.state.partner &&
-              <div className='waiting-for-match'>Waiting for match...</div>
-            }
+           
+
+          <Transcriber/>
+            
           </div>
           <div className='new-chat'>
             <div className='selected-language'>
@@ -215,3 +210,15 @@ class Dashboard extends React.Component {
 }
 
 export default Dashboard;
+
+ // { 
+ //              this.state.partner &&
+ //              <div className='clock-suggestion-wrapper'>
+ //                <Clock partner={this.state.partner} callDone={this.state.callDone} />
+ //                <TopicSuggestion partner={this.state.partner}/>
+ //              </div>
+ //            }
+ // {
+ //              !this.state.partner &&
+ //              <div className='waiting-for-match'>Waiting for match...</div>
+ //            }
