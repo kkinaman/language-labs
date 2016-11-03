@@ -24,36 +24,36 @@ class Transcriber extends React.Component {
   ConnectWithTranslatorServer(lang1, lang2, accToken) {
     console.debug("Connecting with service...");
     try {
-        //Setup connections
-        var newRecorder = new Media.mediaMaker(this.state.stream);
-        this.setState({mediaRecorder: newRecorder});
-        this.state.mediaRecorder.mimeType = 'audio/wav';
-        this.state.mediaRecorder.audioChannels = 2;
-        console.debug("Created media recorder");
-     
-        
-        var ws_url = "wss://dev.microsofttranslator.com/speech/translate?api-version=1.0&from=" + lang1 + "&to=" + lang2 + "&access_token=" + encodeURIComponent(accToken);
-        
-        this.setState({ws: new WebSocket(ws_url)});
-        console.debug("Created websocket");
-        
-        this.state.ws.onopen = () => {
-            this.state.mediaRecorder.start(200);
-            }
-        
-        this.state.ws.onclose = function (event) {
-            console.error('web socket closed' + JSON.stringify(event));
+      //Setup connections
+      var newRecorder = new Media.mediaMaker(this.state.stream);
+      this.setState({mediaRecorder: newRecorder});
+      this.state.mediaRecorder.mimeType = 'audio/wav';
+      this.state.mediaRecorder.audioChannels = 2;
+      console.debug("Created media recorder");
+   
+      
+      var ws_url = "wss://dev.microsofttranslator.com/speech/translate?api-version=1.0&from=" + lang1 + "&to=" + lang2 + "&access_token=" + encodeURIComponent(accToken);
+      
+      this.setState({ws: new WebSocket(ws_url)});
+      console.debug("Created websocket");
+      
+      this.state.ws.onopen = () => {
+        this.state.mediaRecorder.start(200);
         }
-        
-        this.state.ws.onerror = function (event) {
-            alert('exDescription: Code: ' + event.code + ' Reason: ' + event.reason);
-        }
-        console.debug("Setup websocket callbacks");
-        
+      
+      this.state.ws.onclose = function (event) {
+        console.error('web socket closed' + JSON.stringify(event));
+      }
+      
+      this.state.ws.onerror = function (event) {
+        alert('exDescription: Code: ' + event.code + ' Reason: ' + event.reason);
+      }
+      console.debug("Setup websocket callbacks");
+      
         
       } catch (error) {
-          console.error("Error when opening session: " + error);
-          CloseSession();
+        console.error("Error when opening session: " + error);
+        CloseSession();
       }
   }
 
@@ -64,11 +64,11 @@ class Transcriber extends React.Component {
   TerminateConnections(closeStream) {
     
     if (closeStream) {
-        if (this.state.stream) {
-            this.state.stream = null;
-        }
-        else
-            console.error("this.state.stream not set");
+      if (this.state.stream) {
+        this.state.stream = null;
+      }
+      else
+        console.error("this.state.stream not set");
     }
     
     this.state.mediaRecorder ? this.state.mediaRecorder.stop() : console.error("No mediaRecorder");
@@ -80,47 +80,46 @@ class Transcriber extends React.Component {
   }
 
   GenerateToken(callbackIfSuccessfulToken) {
-      var accToken = "";
+    var accToken = "";
 
-      var xhttp = new XMLHttpRequest();
-      // *** USE YOUR OWN SERVER TO RETURN A VALID ADM TOKEN ***
-      // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
-      // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
-      xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
-      
-      xhttp.onreadystatechange = function () {
-          if (xhttp.readyState == 4 && xhttp.status == 200) {
-              accToken = xhttp.responseText;
+    var xhttp = new XMLHttpRequest();
 
-              console.debug("Token: " + accToken);
-              if (typeof callbackIfSuccessfulToken === 'function')
-                  callbackIfSuccessfulToken(accToken);
-              else
-                  console.error("callbackIfSuccessfulToken is not a function");
-          }
+    // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
+    // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
+    xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
+    
+    xhttp.onreadystatechange = function () {
+      if (xhttp.readyState == 4 && xhttp.status == 200) {
+        accToken = xhttp.responseText;
+
+        console.debug("Token: " + accToken);
+        if (typeof callbackIfSuccessfulToken === 'function')
+          callbackIfSuccessfulToken(accToken);
+        else
+          console.error("callbackIfSuccessfulToken is not a function");
       }
-      
-      xhttp.send();
+    }
+    
+    xhttp.send();
   }
 
   StartSession() {
     if (navigator.getUserMedia) {
-        navigator.getUserMedia({ audio: true }, (streamArg) => {
-            console.log(streamArg);
-            this.setState({stream: streamArg});
-            if (this.state.stream)
-            {
-                console.debug("Starting session...");
+      navigator.getUserMedia({ audio: true }, (streamArg) => {
+        console.log(streamArg);
+        this.setState({stream: streamArg});
 
-                this.GenerateToken(this.SetupWebConnection.bind(this));
-    
-            } else {
-               console.error("stream is null");
-            }
-        
-        }, function (e) {
-            alert('Error capturing audio.');
-        });
+        if (this.state.stream) {
+          console.debug("Starting session...");
+
+          this.GenerateToken(this.SetupWebConnection.bind(this));
+        } else {
+         console.error("stream is null");
+        }
+
+      }, function (e) {
+        alert('Error capturing audio.');
+      });
     } 
     else alert('getUserMedia not supported in this browser.');
 
@@ -133,22 +132,23 @@ class Transcriber extends React.Component {
    
     //Handle messages
     this.state.ws.onmessage = (event) => {
-        console.debug('received event from socket.');
-        var response = JSON.parse(event.data);
-        console.debug(response.recognition);
-        
-        if (firstTranslation) {
-            firstTranslation = false;
-        }
-    
-            this.setState({primaryTranscript: response.recognition, secondaryTranscript: response.translation});
-            this.render();
+      console.debug('received event from socket.');
+      var response = JSON.parse(event.data);
+      console.debug(response.recognition);
+      
+      if (firstTranslation) {
+        firstTranslation = false;
+      }
+  
+      this.setState({primaryTranscript: response.recognition, secondaryTranscript: response.translation});
+      this.render();
     }
     
     this.state.mediaRecorder.ondataavailable = (blob) => {
       console.log('data available, sending blob');
-      if (this.state.ws)
-          this.state.ws.send(blob);
+      if (this.state.ws) {
+        this.state.ws.send(blob);
+      }
     };
   }
 
@@ -159,9 +159,9 @@ class Transcriber extends React.Component {
 
   findMatch(userLang, langArray) {
     for (var i = 0; i < langArray.length; i++) {
-        if (userLang == langArray[i].key.substring(0, 2)) {
-            return langArray[i];
-        }
+      if (userLang == langArray[i].key.substring(0, 2)) {
+        return langArray[i];
+      }
     }
     return false;
   }
@@ -173,39 +173,35 @@ class Transcriber extends React.Component {
     
     var xmlhttp = new XMLHttpRequest();
     xmlhttp.onreadystatechange = () => {
-        if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
-            var results = JSON.parse(xmlhttp.responseText);
-            var sourceLangArray = convertToArray(results.speech);
-            var targetLangArray = convertToArray(results.text);
-            var userLang = (navigator.language).substring(0, 2);
-            var match1 = findMatch(userLang, sourceLangArray);
-            if (match1) {
-                this.state.sourceLang = match1.key;
-                this.state.sourceLangName = match1.name;
-            }
-            var match2 = findMatch(userLang, targetLangArray);
-            if (match2) {
-                this.state.targetLang = match2.key;
-                this.state.targetLangName = match2.name;
-            }
-            
-            //save the languages
-            chrome.storage.local.set(
-              { 
-                'sourceLanguage': this.state.sourceLang, 
-                'targetLanguage': this.state.targetLang, 
-                'sourceLanguageName': this.state.sourceLangName, 
-                'targetLanguageName': this.state.targetLangName 
-              }, function () {
-                if (chrome.runtime.lastError) {
-                    Logger.error("Failed to save the selected options at runtime", chrome.runtime.lastError);
-                }
-            });
-            console.log({ 'sourceLanguage': this.state.sourceLang, 
-              'targetLanguage': this.state.targetLang, 
-              'sourceLanguageName': this.state.sourceLangName, 
-              'targetLanguageName': this.state.targetLangName });
+      if (xmlhttp.readyState == 4 && xmlhttp.status == 200) {
+        var results = JSON.parse(xmlhttp.responseText);
+        var sourceLangArray = convertToArray(results.speech);
+        var targetLangArray = convertToArray(results.text);
+        var userLang = (navigator.language).substring(0, 2);
+        var match1 = findMatch(userLang, sourceLangArray);
+        if (match1) {
+            this.state.sourceLang = match1.key;
+            this.state.sourceLangName = match1.name;
         }
+        var match2 = findMatch(userLang, targetLangArray);
+        if (match2) {
+            this.state.targetLang = match2.key;
+            this.state.targetLangName = match2.name;
+        }
+        
+        //save the languages
+        chrome.storage.local.set(
+          { 
+            'sourceLanguage': this.state.sourceLang, 
+            'targetLanguage': this.state.targetLang, 
+            'sourceLanguageName': this.state.sourceLangName, 
+            'targetLanguageName': this.state.targetLangName 
+          }, function () {
+            if (chrome.runtime.lastError) {
+                Logger.error("Failed to save the selected options at runtime", chrome.runtime.lastError);
+            }
+        });
+      }
     }
     xmlhttp.open("GET", langURL, true);
     xmlhttp.setRequestHeader("Content-type", "application/x-www-form-urlencoded");
@@ -227,7 +223,6 @@ class Transcriber extends React.Component {
       if (err) { 
         console.log('error saving note to db:', err);
       }
-        console.log('saving note:', res);
     });
   }
 
