@@ -72,7 +72,6 @@ class Notes extends React.Component {
       var text = {};
       text[firstLang] = firstLangText;
       text[secondLang] = secondLangText;
-      console.log(this.currNote)
 
       Meteor.call('updateNote', {
         'text': text,
@@ -84,7 +83,7 @@ class Notes extends React.Component {
       (err, res) => {
         if (err) { 
           console.log('saving note:', res);
-          return console.log('error saving note to db:', err);
+          return console.log('error saving note to db:', err); 
         }
       });
 
