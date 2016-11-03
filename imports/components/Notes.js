@@ -99,7 +99,7 @@ class Notes extends React.Component {
   render() {
     
     return (
-      <div className="user-profile">
+      <div className="notes">
         {
           this.state.viewAll ?
             <NotesList notes={this.props.notes} displayNote={this.displayNote.bind(this)}/>

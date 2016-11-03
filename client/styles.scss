@@ -206,185 +206,212 @@ body {
   width: 100vw;
   height: 100vh;
   background-color: rgba(0,0,0,.1);
+  display: flex;
+  flex-direction: row;
 
-  .top {
-    height: 65vh;
-    display: flex;
-    flex-direction: row;
+  .left {
+    flex: 3;
 
-    .video-box {
+    .topLeft {
+      height: 74vh;
       display: flex;
-      flex: 3;
-      background-color: white;
-      margin: 10px;
-      align-items: center;
-      justify-content: center;
-      border-radius: 4px;
-      box-shadow: $shadow;
 
-      .hidden {
-        height: 0px;
-        width: 0px;
-        opacity: 0;
-      }
-
-      .welcome {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
+      .video-box {
+        width: 75vw;
+        background-color: white;
+        margin: 10px 5px 5px 10px;
         align-items: center;
-        flex-direction: column;
-        position: absolute;
-        z-index: 100; 
-        background: url('/pattern.svg') center center;
+        justify-content: center;
         border-radius: 4px;
+        box-shadow: $shadow;
 
-        .welcome-title {
-          color: white;
-          font-size: 40px;
-          margin-bottom: 20px;
+        .hidden {
+          height: 0px;
+          width: 0px;
+          opacity: 0;
         }
 
-        .welcome-prompt {
-          color: white;
-        }
-
-        .welcome-matches {
-          font-size: 18px;
-          color: white;
-          font-weight: 700;
-          margin-bottom: 20px;
-        }
-      }
-
-      .waiting {
-        height: 100%;
-        width: 100%;
-        display: flex;
-        flex-direction: column;
-        justify-content: center;
-        align-items: center;
-        background-color: $blue;
-        position: ablsolute;
-        z-index: 0;
-        border-radius: 4px;
-
-        .loader {
-          animation: animate 1.5s linear infinite;
-          clip: rect(0, 80px, 80px, 40px); 
-          height: 80px;
-          width: 80px;
-          position: absolute;
-        }
-
-        @keyframes animate {
-          0% { 
-            transform: rotate(0deg)
-          }
-          100% { 
-            transform: rotate(220deg)
-          }
-        }
-
-        .loader:after {
-          animation: animate2 1.5s ease-in-out infinite;
-          clip: rect(0, 80px, 80px, 40px);
-          content:'';
-          border-radius: 50%; 
-          height: 80px;
-          width: 80px;
-          position: absolute; 
-        } 
-
-        @keyframes animate2 {
-          0% {
-            box-shadow: inset #fff 0 0 0 17px;
-            transform: rotate(-140deg);
-          }
-          50% {
-            box-shadow: inset #fff 0 0 0 2px;
-          }
-          100% {
-            box-shadow: inset #fff 0 0 0 17px;
-            transform: rotate(140deg);
-          }
-        }
-      }
-
-      .review {
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-
-        span, h2 {
-          color: $gray;
-        }
-
-        .stars {
-          text-align: center;
-          cursor: pointer;
-
-          i {
-            margin-right: 2px;
-            nargin-left: 2px;
-          }
-        }
-
-        .review-submit {
-          cursor: pointer;
-          font-family: 'quicksand';
-          font-size: 14px;
-          border: 1px solid $blue;
-          background-color: transparent;
-          color: $blue;
-          border-radius: 4px;
-          height: 30px;
-          width: 130px;
-          transition: all .3s;
-
-          &:hover {
-            color: white;
-            background-color: $blue;
-          }
-        }
-      }
-
-      .video-wrapper {
-        position: relative;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        width: 100%;
-        height: 100%;
-        border-radius: 4px;
-        overflow: hidden;
-
-
-
-        #myVideo {
-          position: absolute;
-          top: -25px;
-          right: 0px;
-          z-index: 100;
-          height: 200px;
-          width: 200px;
-        }
-
-        #theirVideo {
-          z-index: 0;
+        .welcome {
           width: 100%;
+          height: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+          position: absolute;
+          z-index: 100; 
+          background: url('/pattern.svg') center center;
+          border-radius: 4px;
+
+          .welcome-title {
+            color: white;
+            font-size: 40px;
+            margin-bottom: 20px;
+          }
+
+          .welcome-prompt {
+            color: white;
+          }
+
+          .welcome-matches {
+            font-size: 18px;
+            color: white;
+            font-weight: 700;
+            margin-bottom: 20px;
+          }
+        }
+
+        .waiting {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          flex-direction: column;
+          justify-content: center;
+          align-items: center;
+          background-color: $blue;
+          position: ablsolute;
+          z-index: 0;
+          border-radius: 4px;
+
+          .loader {
+            animation: animate 1.5s linear infinite;
+            clip: rect(0, 80px, 80px, 40px); 
+            height: 80px;
+            width: 80px;
+            position: absolute;
+          }
+
+          @keyframes animate {
+            0% { 
+              transform: rotate(0deg)
+            }
+            100% { 
+              transform: rotate(220deg)
+            }
+          }
+
+          .loader:after {
+            animation: animate2 1.5s ease-in-out infinite;
+            clip: rect(0, 80px, 80px, 40px);
+            content:'';
+            border-radius: 50%; 
+            height: 80px;
+            width: 80px;
+            position: absolute; 
+          } 
+
+          @keyframes animate2 {
+            0% {
+              box-shadow: inset #fff 0 0 0 17px;
+              transform: rotate(-140deg);
+            }
+            50% {
+              box-shadow: inset #fff 0 0 0 2px;
+            }
+            100% {
+              box-shadow: inset #fff 0 0 0 17px;
+              transform: rotate(140deg);
+            }
+          }
+        }
+
+        .review {
+          height: 100%;
+          width: 100%;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          flex-direction: column;
+
+          span, h2 {
+            color: $gray;
+          }
+
+          .stars {
+            text-align: center;
+            cursor: pointer;
+
+            i {
+              margin-right: 2px;
+              nargin-left: 2px;
+            }
+          }
+
+          .review-submit {
+            cursor: pointer;
+            font-family: 'quicksand';
+            font-size: 14px;
+            border: 1px solid $blue;
+            background-color: transparent;
+            color: $blue;
+            border-radius: 4px;
+            height: 30px;
+            width: 130px;
+            transition: all .3s;
+
+            &:hover {
+              color: white;
+              background-color: $blue;
+            }
+          }
+        }
+
+        .video-wrapper {
+          position: relative;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          width: 100%;
+          height: 100%;
+          border-radius: 4px;
+          overflow: hidden;
+
+          #myVideo {
+            position: absolute;
+            top: -25px;
+            right: 0px;
+            z-index: 100;
+            height: 200px;
+            width: 200px;
+          }
+
+          #theirVideo {
+            z-index: 0;
+            width: 100%;
+          }
         }
       }
     }
 
-    .profile {
-      flex: 1;
-      margin: 10px;
+    .bottomLeft {
+      height: 24vh;
+      margin: 5px 5px 10px 10px;
+      box-shadow: $shadow;
       border-radius: 4px;
-      display: flex;
-      flex-direction: column;
+      background-color: white;
+      overflow: hidden;
+
+      .waiting-for-match {
+        width: 100%;
+        height: 100%;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        font-size: 24px;
+        color: $blue;  
+      }
+    }
+  }
+
+  .right {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+
+    .topRight {
+      flex: 8;
+      margin: 10px 10px 5px 5px;
+      border-radius: 4px;
       box-shadow: $shadow;
       background-color: white;
 
@@ -400,6 +427,10 @@ body {
         #login-name-link {
           text-decoration: none;
         }
+      }
+
+      notes: {
+        height: 100%;
       }
 
       .active-note {
@@ -433,116 +464,11 @@ body {
           }
         }
       }
-
-
-    }
-  }
-
-  .bottom {
-    height: 32vh;
-    display: flex;
-
-    .text-box {
-      flex: 3;
-      margin: 10px;
-      box-shadow: $shadow;
-      border-radius: 4px;
-      background-color: white;
-      overflow: hidden;
-
-      .waiting-for-match {
-        width: 100%;
-        height: 100%;
-        display: flex;
-        justify-content: center;
-        align-items: center;
-        font-size: 24px;
-        color: $blue;
-      }
-
-
-      .clock-suggestion-wrapper {
-        width: 100%;
-        display: flex;
-        flex-direction: row;
-        justify-content: space-between;
-        align-items: center;
-        height: 100%;
-
-        .topics {
-          flex: 1;
-          text-align: center;
-          height: 100%;
-          display: flex;
-          justify-content: flex-start;
-          align-items: center;
-          flex-direction: column;
-          color: black;
-
-          ul {
-            margin-top: -20px;
-            flex: 3;
-            width: 80%;
-            text-align: center;
-            padding: 0px;
-            list-style: none;
-            overflow: auto;
-
-            li {
-              margin-top: 10px;
-              padding-top: 10px;
-              border-top: 1px solid rgba(0,0,0,.1);
-              font-weight: light;
-              font-size: 18px;
-            }
-          }
-
-          h1 {
-            flex: 1;
-            font-size: 20px;
-            color: $blue;
-            height: 40px;
-            padding: 10px;
-          }
-        }
-
-        .clock {
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          flex-direction: column;
-          background-color: $blue;
-          color: white;
-          flex: 1;
-          height: 100%;
-          text-align: center;
-          position: relative;
-
-          i {
-            position: absolute;
-            left: 20px;
-            top: 20px;
-            margin-right: 10px;
-            font-size: 40px;
-          }
-
-          h1 {
-            margin-top: 10px;
-            font-family: monospace;
-            font-size: 80px;
-            width: 100%;
-          }
-
-          h3 {
-            font-weight: 700;
-          }
-        }
-      }
     }
 
-    .new-chat {
+    .bottomRight {
       flex: 1;
-      margin: 10px;
+      margin: 5px 10px 10px 5px;
       box-shadow: $shadow;
       border-radius: 4px;
       background-color: white;
@@ -595,8 +521,154 @@ body {
   }
 }
 
+/********ORIGINAL CSS - NOT USING**********/
 
+/*.user-profile {
+          height: 100%;
+          flex: 10;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: flex-start;
 
+          .profile-input-wrapper {
+            flex: 1;
+            display: flex;
+            width: 100%;
+            justify-content: space-around;
+            align-items: center;
+            flex-direction: column;
+            max-height: 100px;
+
+            i {
+              margin-left: 5px;
+              font-size: 12px
+            }
+
+            .title {
+              flex: 1;
+              display: block;
+              width: 100%;
+              margin-left: 20px;
+              font-size: 12px;
+              max-height: 20px;
+              color: $blue;
+            }
+
+            .profile-input {
+              cursor: text; 
+              width: calc(100% - 20px);
+              padding: 10px;
+              flex: 1;
+              max-height: 30px;
+              border: 0px;
+              border-bottom: 1px solid rgba(0,0,0,.1);
+              outline: none;
+              font-size: 18px;
+              line-height: 30px;
+              transition: all .3s;
+              overflow: auto;
+
+              &:hover {
+                border-bottom: 1px solid $blue;
+              }
+            }
+
+            .editing {
+              cursor: text; 
+              font-family: 'quicksand';
+              padding: 10px;
+              flex: 1;
+              max-height: 30px;
+              font-size: 18px;
+              width: calc(100% - 20px);
+              border: 0px;
+              border-bottom: 1px solid $blue;
+              outline: none;
+              line-height: 30px;
+            }
+          }
+        }*/
+
+/*
+.clock-suggestion-wrapper {
+  width: 100%;
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
+  height: 100%;
+
+  .topics {
+    flex: 1;
+    text-align: center;
+    height: 100%;
+    display: flex;
+    justify-content: flex-start;
+    align-items: center;
+    flex-direction: column;
+    color: black;
+
+    ul {
+      margin-top: -20px;
+      flex: 3;
+      width: 80%;
+      text-align: center;
+      padding: 0px;
+      list-style: none;
+      overflow: auto;
+
+      li {
+        margin-top: 10px;
+        padding-top: 10px;
+        border-top: 1px solid rgba(0,0,0,.1);
+        font-weight: light;
+        font-size: 18px;
+      }
+    }
+
+    h1 {
+      flex: 1;
+      font-size: 20px;
+      color: $blue;
+      height: 40px;
+      padding: 10px;
+    }
+  }
+}
+
+.clock {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  background-color: $blue;
+  color: white;
+  flex: 1;
+  height: 100%;
+  text-align: center;
+  position: relative;
+
+  i {
+    position: absolute;
+    left: 20px;
+    top: 20px;
+    margin-right: 10px;
+    font-size: 40px;
+  }
+
+  h1 {
+    margin-top: 10px;
+    font-family: monospace;
+    font-size: 80px;
+    width: 100%;
+  }
+
+  h3 {
+    font-weight: 700;
+  }
+}
+*/
 
 
 
