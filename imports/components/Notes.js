@@ -6,38 +6,25 @@ class Notes extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'noteType': 'freeForm',
-      // 'curNote': ''
-      // newNote: ''
+      'noteType': 'freeForm'
     }
   }
 
-  // displayNote(note) {
-  //   this.setState({
-  //     'noteType': note.noteType,
-  //     'curNote': note
-  //   });
-  // }
 
   viewFlashcards() {
-
+    this.setState({
+      'noteType': 'flashcard'
+    })
   }
 
   viewNotes() {
-
+    this.setState({
+      'noteType': 'freeForm'
+    })
   }
-
-  // newNote() {
-  //   this.setState({
-  //     'noteType': 'freeForm',
-  //     // 'curNote': ''
-  //   })
-  //   document.getElementById('note').value = '';
-  // }
 
   saveNote() {
     if (this.state.noteType === 'freeForm') {
-      // if (this.state.curNote === '') {
         var text = document.getElementById('note').value;
         document.getElementById('note').value = '';
 
@@ -48,29 +35,10 @@ class Notes extends React.Component {
           'noteType': 'freeForm'
         }, 
         (err, res) => {
-          // console.log('saving note:', res);
           if (err) { 
             return console.log('error saving note to db:', err);
           }
         });
-
-      // } else {
-      //   var text = document.getElementById('note').value;
-
-      //   Meteor.call('updateNote', {
-      //     'text': text,
-      //     'userId': Meteor.userId(),
-      //     'date': new Date().toString().slice(0, 24),
-      //     'noteType': 'freeForm',
-      //     'noteId': this.state.curNote._id
-      //   }, 
-      //   (err, res) => {
-      //     console.log('saving note:', res);
-      //     if (err) { 
-      //       return console.log('error saving note to db:', err);
-      //     }
-      //   });
-      // }
 
     } else {
       var firstLang = this.props.user.profile.language.toLowerCase();
@@ -87,10 +55,8 @@ class Notes extends React.Component {
         'userId': Meteor.userId(),
         'date': new Date().toString().slice(0, 24),
         'noteType': 'flashcard'
-        // 'noteId': this.curNote._id
       }, 
       (err, res) => {
-        // console.log('saving note:', res);
         if (err) { 
           return console.log('error saving note to db:', err); 
         }
@@ -101,17 +67,25 @@ class Notes extends React.Component {
   render() {
     
     return (
-      <div className="notes">
-        <div className='saved-notes'>
-          <NotesList notes={this.props.notes} />
-        </div>
-        {
-          this.state.noteType === 'freeForm' ?
+      <div className="notes-container">
+      {
+        this.state.noteType === 'freeForm' ?
+          <div className='notes'>
+            <div className='saved-notes'>
+              <NotesList notes={this.props.notes} />
+            </div>
             <textarea id='note' className="new-note" placeholder="Type a note here">
             </textarea>
-          :
-            <Flashcard user={this.props.user}/>
-        }
+          </div>
+        :
+          <div className='notes'>
+            <div className='saved-notes'>
+              <FlashcardsList notes={this.props.notes} user={this.props.user}/>
+            </div>
+            <textarea id='note' className="new-note" placeholder="Type a note here">
+            </textarea>
+          </div>
+      }
         <div className='notes-buttons'>
           <div className="button-wrapper">
             <button onClick={this.viewFlashcards.bind(this)}>Vocab</button>
@@ -134,44 +108,50 @@ class NotesList extends React.Component {
     return (
       <div>
       {
-        this.props.notes.map(note => (
-
-          <div className='note'>
-            <text>{note.text}</text>
-          </div>
-        ))
+        this.props.notes.map(note => {
+          if (typeof note.text === 'string') {
+            return (
+              <div className='note'>
+                <text>{note.text}</text>
+              </div>
+            )
+          }
+        })
       }
       </div>
     );
   }
 }
 
-class Flashcard extends React.Component {
+class FlashcardsList extends React.Component {
   constructor(props) {
     super(props)
   }
 
   render() {
     return (
-      <div className='flashcard-container' style={{display: 'flex'}}>
-        <div className='first-language-container'>
-          <div className='language'>
-            <text>{this.props.user.profile.language}</text>
-          </div>
-          <div className='text'>
-            <textarea id='first-lang-text' rows='20' type="text" defaultValue={this.props.note.text[this.props.user.profile.language]}></textarea>
-          </div>
-        </div>
-
-        <div className='second-language-container'>
-          <div className='language'>
-            <text>{this.props.user.profile.learning}</text>
-          </div>
-          <div className='text'>
-            <textarea id='second-lang-text' rows='20' type="text" defaultValue={this.props.note.text[this.props.user.profile.learning]}></textarea>
-          </div>
-        </div>
-      </div>
+      <table>
+        <thead>
+          <tr>
+            <th>{this.props.user.profile.language}</th>
+            <th>{this.props.user.profile.learning}</th>
+          </tr>
+        </thead>
+        <tbody>
+          {
+            this.props.notes.map(note => {
+              if (typeof note.text === 'object') {
+                return (
+                  <tr>
+                    <td><text>{note.text[this.props.user.profile.language.toLowerCase()]}</text></td>
+                    <td><text>{note.text[this.props.user.profile.learning.toLowerCase()]}</text></td>
+                  </tr>
+                )
+              }
+            })
+          }
+        </tbody>
+      </table>    
     )
   }
 }
