@@ -6,23 +6,18 @@ class Notes extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      // 'viewAll': false,
       'noteType': 'freeForm',
-      'currNote': ''
+      // 'curNote': ''
+      // newNote: ''
     }
   }
 
-  // viewNotes() {
-  //   this.setState({'viewAll': true});
+  // displayNote(note) {
+  //   this.setState({
+  //     'noteType': note.noteType,
+  //     'curNote': note
+  //   });
   // }
-
-  displayNote(note) {
-    this.setState({
-      // 'viewAll': false,
-      'noteType': note.noteType,
-      'currNote': note
-    });
-  }
 
   viewFlashcards() {
 
@@ -32,19 +27,19 @@ class Notes extends React.Component {
 
   }
 
-  newNote() {
-    this.setState({
-      'noteType': 'freeForm',
-      'currNote': '',
-      // 'viewAll': false
-    })
-    document.getElementById('note').value = '';
-  }
+  // newNote() {
+  //   this.setState({
+  //     'noteType': 'freeForm',
+  //     // 'curNote': ''
+  //   })
+  //   document.getElementById('note').value = '';
+  // }
 
   saveNote() {
     if (this.state.noteType === 'freeForm') {
-      if (this.state.currNote === '') {
+      // if (this.state.curNote === '') {
         var text = document.getElementById('note').value;
+        document.getElementById('note').value = '';
 
         Meteor.call('addNote', {
           'text': text,
@@ -53,29 +48,29 @@ class Notes extends React.Component {
           'noteType': 'freeForm'
         }, 
         (err, res) => {
+          // console.log('saving note:', res);
           if (err) { 
-            console.log('saving note:', res);
             return console.log('error saving note to db:', err);
           }
         });
 
-      } else {
-        var text = document.getElementById('note').value;
+      // } else {
+      //   var text = document.getElementById('note').value;
 
-        Meteor.call('updateNote', {
-          'text': text,
-          'userId': Meteor.userId(),
-          'date': new Date().toString().slice(0, 24),
-          'noteType': 'freeForm',
-          'noteId': this.state.currNote._id
-        }, 
-        (err, res) => {
-          if (err) { 
-            console.log('saving note:', res);
-            return console.log('error saving note to db:', err);
-          }
-        });
-      }
+      //   Meteor.call('updateNote', {
+      //     'text': text,
+      //     'userId': Meteor.userId(),
+      //     'date': new Date().toString().slice(0, 24),
+      //     'noteType': 'freeForm',
+      //     'noteId': this.state.curNote._id
+      //   }, 
+      //   (err, res) => {
+      //     console.log('saving note:', res);
+      //     if (err) { 
+      //       return console.log('error saving note to db:', err);
+      //     }
+      //   });
+      // }
 
     } else {
       var firstLang = this.props.user.profile.language.toLowerCase();
@@ -91,12 +86,12 @@ class Notes extends React.Component {
         'text': text,
         'userId': Meteor.userId(),
         'date': new Date().toString().slice(0, 24),
-        'noteType': 'flashcard',
-        'noteId': this.currNote._id
+        'noteType': 'flashcard'
+        // 'noteId': this.curNote._id
       }, 
       (err, res) => {
+        // console.log('saving note:', res);
         if (err) { 
-          console.log('saving note:', res);
           return console.log('error saving note to db:', err); 
         }
       });
@@ -108,14 +103,14 @@ class Notes extends React.Component {
     return (
       <div className="notes">
         <div className='saved-notes'>
-          <NotesList notes={this.props.notes} displayNote={this.displayNote.bind(this)}/>
+          <NotesList notes={this.props.notes} />
         </div>
         {
           this.state.noteType === 'freeForm' ?
-            <textarea id='note' className="active-note" placeholder="Type your notes here" defaultValue={this.state.currNote.text}>
+            <textarea id='note' className="new-note" placeholder="Type a note here">
             </textarea>
           :
-            <Flashcard note={this.state.currNote} user={this.props.user}/>
+            <Flashcard user={this.props.user}/>
         }
         <div className='notes-buttons'>
           <div className="button-wrapper">
@@ -140,8 +135,9 @@ class NotesList extends React.Component {
       <div>
       {
         this.props.notes.map(note => (
-          <div>
-            <text onClick={this.props.displayNote.bind(null, note)}>{note.title}</text>
+
+          <div className='note'>
+            <text>{note.text}</text>
           </div>
         ))
       }
