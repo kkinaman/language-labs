@@ -10,7 +10,8 @@ class NotesPage extends React.Component {
     return (
       <div className='notes-page'>
         <NavigationWrapper returnToNav={ this.props.returnToNav } />
-      </div>    
+        <h1>Notes</h1>    
+      </div>
     )
   }
 }

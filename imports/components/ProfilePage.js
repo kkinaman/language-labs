@@ -10,6 +10,7 @@ class ProfilePage extends React.Component {
     return (
       <div className='notes-page'>
         <NavigationWrapper returnToNav={ this.props.returnToNav } />
+        <h1>Profile</h1>
       </div>    
     )
   }

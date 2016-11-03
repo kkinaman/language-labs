@@ -9,7 +9,7 @@ class NavigationWrapper extends React.Component {
   render() {
     return (
       <div className='sign-out'>
-        <div onClick={ this.props.returnToNav } className='navigation-module left'>Back to nav</div>
+        <div onClick={ this.props.returnToNav } className='navigation-module left'>Back to dashboard</div>
         <div className='navigation-module'>
           <AccountsUIWrapper />
         </div>
