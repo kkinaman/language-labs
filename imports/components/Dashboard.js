@@ -149,7 +149,7 @@ class Dashboard extends React.Component {
                 {this.state.callLoading &&
                   <Waiting />
                 }
-                <video ref='myVideo' id='myVideo' muted='true' autoPlay='true' 
+                <video ref='myVideo' id='myVideo' autoPlay='true' 
                   className={this.state.callLoading ? 'hidden' : null}></video>
                 <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'
                   className={this.state.callLoading ? 'hidden' : null}></video>

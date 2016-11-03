@@ -86,7 +86,7 @@ class Transcriber extends React.Component {
       // *** USE YOUR OWN SERVER TO RETURN A VALID ADM TOKEN ***
       // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
       // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
-      xhttp.open("GET", "http://localhost:3000/token", true);
+      xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
       
       xhttp.onreadystatechange = function () {
           if (xhttp.readyState == 4 && xhttp.status == 200) {
