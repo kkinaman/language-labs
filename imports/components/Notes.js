@@ -6,10 +6,11 @@ class Notes extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'noteType': 'freeForm'
+      'noteType': 'freeForm',
+      'nativeText': '',
+      'learningText': ''
     }
   }
-
 
   viewFlashcards() {
     this.setState({
@@ -25,32 +26,36 @@ class Notes extends React.Component {
 
   saveNote() {
     if (this.state.noteType === 'freeForm') {
-        var text = document.getElementById('note').value;
-        document.getElementById('note').value = '';
+      var text = document.getElementById('note').value;
+      document.getElementById('note').value = '';
 
-        Meteor.call('addNote', {
-          'text': text,
-          'userId': Meteor.userId(),
-          'date': new Date().toString().slice(0, 24),
-          'noteType': 'freeForm'
-        }, 
-        (err, res) => {
-          if (err) { 
-            return console.log('error saving note to db:', err);
-          }
-        });
+      Meteor.call('addNote', {
+        'text': text,
+        'userId': Meteor.userId(),
+        'date': new Date().toString().slice(0, 24),
+        'noteType': 'freeForm'
+      }, 
+      (err, res) => {
+        if (err) { 
+          return console.log('error saving note to db:', err);
+        }
+      });
 
     } else {
-      var firstLang = this.props.user.profile.language.toLowerCase();
-      var secondLang = this.props.user.profile.learning.toLowerCase();
-      var firstLangText = document.getElementById('first-lang-text').value;
-      var secondLangText = document.getElementById('second-lang-text').value;
+      var sourceLang = this.props.user.profile.language.toLowerCase();
+      var targetLang = this.props.user.profile.learning.toLowerCase();
 
       var text = {};
-      text[firstLang] = firstLangText;
-      text[secondLang] = secondLangText;
+      text[sourceLang] = this.state.nativeText;
+      text[targetLang] = this.state.learningText;
 
-      Meteor.call('updateNote', {
+      this.setState({
+        nativeText: '',
+        learningText: ''
+      });
+
+
+      Meteor.call('addNote', {
         'text': text,
         'userId': Meteor.userId(),
         'date': new Date().toString().slice(0, 24),
@@ -58,10 +63,18 @@ class Notes extends React.Component {
       }, 
       (err, res) => {
         if (err) { 
-          return console.log('error saving note to db:', err); 
+          console.log('error saving note to db:', err); 
         }
       });
     }
+  }
+
+  nativeTextChanged(event) {
+    this.setState({nativeText: event.target.value});
+  }
+
+  learningTextChanged(event) {
+    this.setState({learningText: event.target.value});
   }
 
   render() {
@@ -82,14 +95,25 @@ class Notes extends React.Component {
             <div className='saved-notes'>
               <FlashcardsList notes={this.props.notes} user={this.props.user}/>
             </div>
-            <textarea id='note' className="new-note" placeholder="Type a note here">
-            </textarea>
+            <form>
+              <label >Add a translation</label><br/>
+              <div className='inputs'>
+                <input placeholder={this.props.user.profile.language} 
+                        value={this.state.nativeText} 
+                        onChange={this.nativeTextChanged.bind(this)}/>
+                <input placeholder={this.props.user.profile.learning} 
+                        value={this.state.learningText}
+                        onChange={this.learningTextChanged.bind(this)}/>
+              </div>
+            </form>
           </div>
       }
         <div className='notes-buttons'>
-          <div className="button-wrapper">
+          <div className="button-wrapper floatLeft">
             <button onClick={this.viewFlashcards.bind(this)}>Vocab</button>
             <button onClick={this.viewNotes.bind(this)}>Notes</button>
+          </div>
+          <div className="button-wrapper floatRight">
             <button onClick={this.saveNote.bind(this)}>Save</button>
           </div>
         </div>
@@ -109,7 +133,7 @@ class NotesList extends React.Component {
       <div>
       {
         this.props.notes.map(note => {
-          if (typeof note.text === 'string') {
+          if (note.noteType === 'freeForm') {
             return (
               <div className='note'>
                 <text>{note.text}</text>
@@ -140,7 +164,7 @@ class FlashcardsList extends React.Component {
         <tbody>
           {
             this.props.notes.map(note => {
-              if (typeof note.text === 'object') {
+              if (note.noteType === 'flashcard') {
                 return (
                   <tr>
                     <td><text>{note.text[this.props.user.profile.language.toLowerCase()]}</text></td>
