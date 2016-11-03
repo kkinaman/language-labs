@@ -4,6 +4,8 @@ import { Mongo } from 'meteor/mongo';
 export const Notes = new Mongo.Collection('notes');
 Meteor.notes = Notes;
 
+import { HTTP } from 'meteor/http';
+
 Meteor.startup(function () {
 
   Meteor.publish('presences', function() {
@@ -46,6 +48,24 @@ Meteor.startup(function () {
         }
       )
     }
+  });
+
+  WebApp.connectHandlers.use("/token", function(req, res, next) {
+
+    HTTP.post('https://api.cognitive.microsoft.com/sts/v1.0/issueToken', 
+      {
+        headers: {
+          'Ocp-Apim-Subscription-Key': '0b2cbbe3d7fc4dcf816e237665026012',
+        },
+        data: ""
+      }, function(err, resp) {
+        if (err) console.log(err);
+        console.log(resp);
+      res.writeHead(200);
+      res.end(resp.content);
+    });
+
+
   });
 });
 
