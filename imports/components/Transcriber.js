@@ -8,7 +8,8 @@ class Transcriber extends React.Component {
     super(props)
 
     this.state = {
-      transcript: '',
+      primaryTranscript: '',
+      secondaryTranscript: '',
       sourceLang: 'en',
       sourceLangName: "English",
       targetLang: "es",
@@ -46,7 +47,6 @@ class Transcriber extends React.Component {
         
         this.state.ws.onerror = function (event) {
             alert('exDescription: Code: ' + event.code + ' Reason: ' + event.reason);
-            displayError(5);
         }
         console.debug("Setup websocket callbacks");
         
@@ -116,7 +116,6 @@ class Transcriber extends React.Component {
     
             } else {
                console.error("stream is null");
-               displayError(8);
             }
         
         }, function (e) {
@@ -142,7 +141,7 @@ class Transcriber extends React.Component {
             firstTranslation = false;
         }
     
-            this.setState({transcript: response.recognition + '(' + response.translation + ')'});
+            this.setState({primaryTranscript: response.recognition, secondaryTranscript: response.translation});
             this.render();
     }
     
@@ -204,62 +203,34 @@ class Transcriber extends React.Component {
     xmlhttp.send();
   }
 
-//The purpose of this function is to display an error to the user based on the scenario
-  displayError(errorCode) {
-    
-    var messageText = "";
-    var messageString = "";
-    var debuggingString = "";
-    var icon = "";
-    
-    switch (errorCode) {
-        case 1: {
-            messageText = "Listening";
-            messageString = "Streaming audio and waiting for subtitles.";
-            icon = "listen";
-            break;
-        }
-        case 5: {
-            messageText = "Oops";
-            messageString = "The subtitling service is temporarily unavailable. Please try again later.";
-            icon = "error";
-            break;
-        }
-       
-        case 9: {
-            messageText = "Oops";
-            messageString = "Looks like the service is overloaded. Please try again later.";
-            icon = "error";
-            break;
-        }
-        case 10: {
-            messageText = "Oops";
-            messageString = "The subtitling service is temporarily unavailable. Please try again later.";
-            debuggingString = "Azure service didn't give us a token";
-            icon = "error";
-            break;
-        }
-        
-        default: {
-            messageText = "Oops...";
-            messageString = "Something went wrong. Please try later.";
-            icon = "error";
-            break;
-        }
-       
-    }
-    
-    console.error(debuggingString, messageText, messageString);
-    
+  saveNote() {
+    var sourceLang = this.state.sourceLangName.toLowerCase();
+    var targetLang = this.state.targetLangName.toLowerCase();
+    var text = {};
+    text[sourceLang] = this.state.primaryTranscript;
+    text[targetLang] = this.state.secondaryTranscript;
+    Meteor.call('addNote', {
+      'text': text,
+      'userId': Meteor.userId(),
+      'date': new Date().toString().slice(0, 24),
+      'noteType': 'flashcard'
+    }, (err, res) => {
+      if (err) { 
+        console.log('error saving note to db:', err);
+      }
+        console.log('saving note:', res);
+    });
   }
-
 
   render() {
     return (
       <div>
         <button onClick={this.StartSession.bind(this)}>Start</button>
         <button onClick={this.StopSession.bind(this)}>Stop</button>
-        <div className='output'>{this.state.transcript}</div>
+        <button onClick={this.saveNote.bind(this)}>Save</button>
+        <div className='output'>{this.state.primaryTranscript}</div>
+        <div className='output'>{this.state.secondaryTranscript}</div>
+
       </div>
     )
   }

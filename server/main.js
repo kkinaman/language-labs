@@ -60,9 +60,8 @@ Meteor.startup(function () {
         data: ""
       }, function(err, resp) {
         if (err) console.log(err);
-        console.log(resp);
-      res.writeHead(200);
-      res.end(resp.content);
+        res.writeHead(200);
+        res.end(resp.content);
     });
 
 

@@ -64,8 +64,8 @@ class Notes extends React.Component {
       document.getElementById('note').value = '';
 
     } else {
-      var firstLang = this.props.user.profile.language;
-      var secondLang = this.props.user.profile.learning;
+      var firstLang = this.props.user.profile.language.toLowerCase();
+      var secondLang = this.props.user.profile.learning.toLowerCase();
       var firstLangText = document.getElementById('first-lang-text').value;
       var secondLangText = document.getElementById('second-lang-text').value;
 
