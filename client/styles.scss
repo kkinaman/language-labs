@@ -433,21 +433,25 @@ body {
         height: 62%;
 
         .saved-notes {
-          padding: 5px;
+          padding: 10px;
           border: 1px solid #eee;
           height: 90%;
+          overflow-y: auto;
         }
 
-        .notes-buttons {
+        .note {
+          margin-bottom: 10px;
+          padding-bottom: 10px;
+          border-bottom: 1px solid #eee;
         }
       }
 
-      .active-note {
+      .new-note {
         width: 90%;
         height: 20%;
         margin-top: 10px;
         border-color: #eee;
-        font-size: 12px;
+        font-size: 14px;
       }
     }
 
