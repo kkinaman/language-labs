@@ -26,6 +26,7 @@ class Navigation extends React.Component {
           peer={this.props.peer}
           user={this.props.user}
           notes={this.props.notes}
+          returnToNav={ this.handleNavigationClick.bind(this, 'nav') }
         />
       )
     } else if (this.state.page === 'notes') {
@@ -42,7 +43,7 @@ class Navigation extends React.Component {
       )
     } else {
       return (
-        <div>
+        <div className='navigation-list'>
           <div onClick={ this.handleNavigationClick.bind(this, 'video') } >Start a conversation with someone</div>
           <div onClick={ this.handleNavigationClick.bind(this, 'profile') } >Edit your profile</div>
           <div onClick={ this.handleNavigationClick.bind(this, 'shop') } >Shop for stuff you might be interested in</div>

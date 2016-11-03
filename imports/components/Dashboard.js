@@ -165,7 +165,10 @@ class Dashboard extends React.Component {
           </div>
           <div className='profile'>
             <div className='sign-out'>
-              <AccountsUIWrapper />
+              <div onClick={ this.props.returnToNav }className='navigation-module left'>Back to nav</div>
+              <div className='navigation-module'>
+                <AccountsUIWrapper />
+              </div>
             </div>
             <Notes notes={this.props.notes} user={this.props.user}/>
           </div>
