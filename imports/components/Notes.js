@@ -8,7 +8,7 @@ class Notes extends React.Component {
     this.state = {
       'viewAll': false,
       'noteType': 'freeForm',
-      'currNote': {}
+      'currNote': ''
     }
   }
 
@@ -18,28 +18,48 @@ class Notes extends React.Component {
 
   displayNote(note) {
     this.setState({
-      'viewAll': false, 
-      'noteType': note.noteType, 
-      currNote: note
+      'viewAll': false,
+      'noteType': note.noteType,
+      'currNote': note
     });
+     
   }
 
   saveNote() {
-    if (this.state.currNote.noteType === 'freeForm') {
-      var text = document.getElementById('note').value;
+    if (this.state.noteType === 'freeForm') {
+      if (this.state.currNote === '') {
+        var text = document.getElementById('note').value;
 
-      Meteor.call('addNote', {
-        'text': text,
-        '_id': Meteor.userId(),
-        'date': new Date().toString().slice(0, 24),
-        'noteType': 'freeForm'
-      }, 
-      (err, res) => {
-        if (err) { 
-          console.log('saving note:', res);
-          return console.log('error saving note to db:', err); 
-        }
-      });
+        Meteor.call('addNote', {
+          'text': text,
+          'userId': Meteor.userId(),
+          'date': new Date().toString().slice(0, 24),
+          'noteType': 'freeForm'
+        }, 
+        (err, res) => {
+          if (err) { 
+            console.log('saving note:', res);
+            return console.log('error saving note to db:', err);
+          }
+        });
+
+      } else {
+        var text = document.getElementById('note').value;
+
+        Meteor.call('updateNote', {
+          'text': text,
+          'userId': Meteor.userId(),
+          'date': new Date().toString().slice(0, 24),
+          'noteType': 'freeForm',
+          'noteId': this.state.currNote._id
+        }, 
+        (err, res) => {
+          if (err) { 
+            console.log('saving note:', res);
+            return console.log('error saving note to db:', err);
+          }
+        });
+      }
 
       document.getElementById('note').value = '';
 
@@ -52,13 +72,13 @@ class Notes extends React.Component {
       var text = {};
       text[firstLang] = firstLangText;
       text[secondLang] = secondLangText;
-      console.log(text)
 
-      Meteor.call('addNote', {
+      Meteor.call('updateNote', {
         'text': text,
-        '_id': Meteor.userId(),
+        'userId': Meteor.userId(),
         'date': new Date().toString().slice(0, 24),
-        'noteType': 'flashcard'
+        'noteType': 'flashcard',
+        'noteId': this.currNote._id
       }, 
       (err, res) => {
         if (err) { 
@@ -70,6 +90,8 @@ class Notes extends React.Component {
       document.getElementById('first-lang-text').value = '';
       document.getElementById('second-lang-text').value = '';
     }
+
+    this.setState({currNote: ''});
   }
 
   render() {
@@ -91,10 +113,10 @@ class Notes extends React.Component {
         }
         <div>
           <div className="button-wrapper">
-            <button onClick={this.viewNotes.bind(this)}>View all</button>  
+            <button onClick={this.viewNotes.bind(this)}>View all</button>
           </div>
           <div className="button-wrapper">
-            <button onClick={this.saveNote.bind(this)}>Save</button>  
+            <button onClick={this.saveNote.bind(this)}>Save</button>
           </div>
         </div>
       </div>
@@ -116,7 +138,7 @@ class Flashcard extends React.Component {
             <text>{this.props.user.profile.language}</text>
           </div>
           <div className='text'>
-            <input id='first-lang-text' type="text" defaultValue={this.props.note.text[this.props.user.profile.language]}/>
+            <textarea id='first-lang-text' rows='20' type="text" defaultValue={this.props.note.text[this.props.user.profile.language]}></textarea>
           </div>
         </div>
 
@@ -125,7 +147,7 @@ class Flashcard extends React.Component {
             <text>{this.props.user.profile.learning}</text>
           </div>
           <div className='text'>
-            <input id='second-lang-text' type="text" defaultValue={this.props.note.text[this.props.user.profile.learning]}/>
+            <textarea id='second-lang-text' rows='20' type="text" defaultValue={this.props.note.text[this.props.user.profile.learning]}></textarea>
           </div>
         </div>
       </div>
