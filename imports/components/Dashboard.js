@@ -139,52 +139,42 @@ class Dashboard extends React.Component {
   render() {
     return (
       <div className='dashboard'>
-        <div className='top'>
-          <div className='video-box'>
-            {!this.state.callDone &&
-              <div className='video-wrapper'>
-                {!this.state.callLoading && !this.state.currentCall &&
-                  <Welcome numMatches={this.props.onlineUsers.length}/>
-                }
-                {this.state.callLoading &&
-                  <Waiting />
-                }
-                <video ref='myVideo' id='myVideo' autoPlay='true' 
-                  className={this.state.callLoading ? 'hidden' : null}></video>
-                <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'
-                  className={this.state.callLoading ? 'hidden' : null}></video>
-              </div>
-            }
+        <div className='left'>
+          <div className='topLeft'>
+            <div className='video-box'>
+              {!this.state.callDone &&
+                <div className='video-wrapper'>
+                  {!this.state.callLoading && !this.state.currentCall &&
+                    <Welcome numMatches={this.props.onlineUsers.length}/>
+                  }
+                  {this.state.callLoading &&
+                    <Waiting />
+                  }
+                  <video ref='myVideo' id='myVideo' autoPlay='true' 
+                    className={this.state.callLoading ? 'hidden' : null}></video>
+                  <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'
+                    className={this.state.callLoading ? 'hidden' : null}></video>
+                </div>
+              }
 
-            {!this.state.currentCall && this.state.callDone &&
-              <Review 
-                partner={this.state.partner}
-                clearPartner={this.clearPartner.bind(this)}
-              />
-            }
+              {!this.state.currentCall && this.state.callDone &&
+                <Review 
+                  partner={this.state.partner}
+                  clearPartner={this.clearPartner.bind(this)}
+                />
+              }
+            </div>
           </div>
-          <div className='profile'>
+          <div className='bottomLeft'>
+            <Transcriber/>  
+          </div>
+        </div>
+        <div className='right'>
+          <div className='topRight'>
             <NavigationWrapper returnToNav={ this.props.returnToNav } />
             <Notes notes={this.props.notes} user={this.props.user}/>
           </div>
-        </div>
-        <div className='bottom'>
-          <div className='text-box'>
-           
-
-          <Transcriber/>
-            
-          </div>
-          <div className='new-chat'>
-            <div className='selected-language'>
-              Selected Languages
-            </div>
-            <div className='language'>
-              {
-               `${this.props.user.profile.language} / 
-                ${this.props.user.profile.learning}`
-              }
-            </div>
+          <div className='bottomRight'>
             <div className='button-wrapper'>
               {!this.props.onlineUsers[0] &&
                 <button>Waiting</button>
@@ -208,6 +198,18 @@ class Dashboard extends React.Component {
 }
 
 export default Dashboard;
+
+/*
+<div className='selected-language'>
+              Selected Languages
+            </div>
+            <div className='language'>
+              {
+               `${this.props.user.profile.language} / 
+                ${this.props.user.profile.learning}`
+              }
+            </div>
+          */
 
  // { 
  //              this.state.partner &&
