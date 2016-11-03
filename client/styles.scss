@@ -107,6 +107,33 @@ body {
   }
 }
 
+.navigation-list {
+  font-size: 250%;
+}
+
+.navigation-module {
+  display: inline-block;
+}
+
+.navigation-module.left {
+  float: left;
+  margin-left: 20px;
+}
+
+.sign-out {
+  flex: 1;
+  height: 40px;
+  text-align: right;
+  padding-right: 20px;
+  padding-top: 20px;
+  background-color: $blue;
+  color: white;
+
+  #login-name-link {
+    text-decoration: none;
+  }
+}
+
 .dashboard {
   width: 100vw;
   height: 100vh;

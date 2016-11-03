@@ -1,6 +1,5 @@
 import React             from 'react';
 import { Meteor }        from 'meteor/meteor';
-import AccountsUIWrapper from './accounts';
 import SelectLanguage    from './SelectLanguage';
 import Matches           from './Matches';
 import UserProfile       from './UserProfile';
@@ -11,6 +10,7 @@ import Waiting           from './Waiting';
 import Welcome           from './Welcome';
 import Notes             from './Notes';
 import Transcriber       from './Transcriber';
+import NavigationWrapper from './NavigationWrapper';
 
 
 class Dashboard extends React.Component {
@@ -164,9 +164,7 @@ class Dashboard extends React.Component {
             }
           </div>
           <div className='profile'>
-            <div className='sign-out'>
-              <AccountsUIWrapper />
-            </div>
+            <NavigationWrapper returnToNav={ this.props.returnToNav } />
             <Notes notes={this.props.notes} user={this.props.user}/>
           </div>
         </div>
