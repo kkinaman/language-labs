@@ -1,4 +1,5 @@
 import React from 'react';
+import UserProfile from './UserProfile';
 import NavigationWrapper from './NavigationWrapper';
 
 class ProfilePage extends React.Component {
@@ -10,7 +11,7 @@ class ProfilePage extends React.Component {
     return (
       <div className='notes-page'>
         <NavigationWrapper returnToNav={ this.props.returnToNav } />
-        <h1>Profile</h1>
+        <UserProfile user={ this.props.user } />
       </div>    
     )
   }

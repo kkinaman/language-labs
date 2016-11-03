@@ -38,7 +38,9 @@ class Navigation extends React.Component {
       );
     } else if (this.state.page === 'profile') {
       return (
-       <ProfilePage returnToNav={ this.handleNavigationClick.bind(this, 'nav') } />
+       <ProfilePage returnToNav={ this.handleNavigationClick.bind(this, 'nav') }
+        user={ this.props.user }
+        />
       );
     } else if (this.state.page === 'shop') {
       return (

@@ -38,6 +38,7 @@ class UserProfile extends React.Component {
   render() {
     return (
       <div className='user-profile'>
+        <h1>Edit your profile</h1>
         <div className='profile-input-wrapper'>
           <div className='title'>
             I Speak 

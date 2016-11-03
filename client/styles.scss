@@ -134,6 +134,74 @@ body {
   }
 }
 
+.user-profile {
+  height: 100%;
+  flex: 10;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: flex-start;
+  padding: 20px;
+
+  .profile-input-wrapper {
+    flex: 1;
+    display: flex;
+    width: 90%;
+    justify-content: space-around;
+    align-items: center;
+    flex-direction: column;
+    max-height: 100px;
+
+    i {
+      margin-left: 5px;
+      font-size: 12px
+    }
+
+    .title {
+      flex: 1;
+      display: block;
+      width: 100%;
+      margin-left: 20px;
+      font-size: 12px;
+      max-height: 20px;
+      color: $blue;
+    }
+
+    .profile-input {
+      cursor: text; 
+      width: calc(100% - 20px);
+      padding: 10px;
+      flex: 1;
+      max-height: 30px;
+      border: 0px;
+      border-bottom: 1px solid rgba(0,0,0,.1);
+      outline: none;
+      font-size: 18px;
+      line-height: 30px;
+      transition: all .3s;
+      overflow: auto;
+
+      &:hover {
+        border-bottom: 1px solid $blue;
+      }
+    }
+
+    .editing {
+      cursor: text; 
+      font-family: 'quicksand';
+      padding: 10px;
+      flex: 1;
+      max-height: 30px;
+      font-size: 18px;
+      width: calc(100% - 20px);
+      border: 0px;
+      border-bottom: 1px solid $blue;
+      outline: none;
+      line-height: 30px;
+    }
+  }
+}
+
 .dashboard {
   width: 100vw;
   height: 100vh;
@@ -366,72 +434,7 @@ body {
         }
       }
 
-      .user-profile {
-        height: 100%;
-        flex: 10;
-        display: flex;
-        flex-direction: column;
-        align-items: center;
-        justify-content: flex-start;
 
-        .profile-input-wrapper {
-          flex: 1;
-          display: flex;
-          width: 100%;
-          justify-content: space-around;
-          align-items: center;
-          flex-direction: column;
-          max-height: 100px;
-
-          i {
-            margin-left: 5px;
-            font-size: 12px
-          }
-
-          .title {
-            flex: 1;
-            display: block;
-            width: 100%;
-            margin-left: 20px;
-            font-size: 12px;
-            max-height: 20px;
-            color: $blue;
-          }
-
-          .profile-input {
-            cursor: text; 
-            width: calc(100% - 20px);
-            padding: 10px;
-            flex: 1;
-            max-height: 30px;
-            border: 0px;
-            border-bottom: 1px solid rgba(0,0,0,.1);
-            outline: none;
-            font-size: 18px;
-            line-height: 30px;
-            transition: all .3s;
-            overflow: auto;
-
-            &:hover {
-              border-bottom: 1px solid $blue;
-            }
-          }
-
-          .editing {
-            cursor: text; 
-            font-family: 'quicksand';
-            padding: 10px;
-            flex: 1;
-            max-height: 30px;
-            font-size: 18px;
-            width: calc(100% - 20px);
-            border: 0px;
-            border-bottom: 1px solid $blue;
-            outline: none;
-            line-height: 30px;
-          }
-        }
-      }
     }
   }
 
