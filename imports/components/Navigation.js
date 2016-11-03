@@ -7,13 +7,15 @@ class Navigation extends React.Component {
     super(props)
 
     this.state = {
-      page: 'nav'
+      'page': 'nav'
     };
   }
 
-
-
-
+  handleNavigationClick(page) {
+    this.setState({
+      'page': page
+    });
+  }
 
   render() {
     if (this.state.page === 'video') {
@@ -40,11 +42,12 @@ class Navigation extends React.Component {
       )
     } else {
       return (
-        <div>Main nav page</div>
-        <div>Main nav page</div>
-        <div>Main nav page</div>
-        <div>Main nav page</div>
-        
+        <div>
+          <div onClick={ this.handleNavigationClick.bind(this, 'video') } >Start a conversation with someone</div>
+          <div onClick={ this.handleNavigationClick.bind(this, 'profile') } >Edit your profile</div>
+          <div onClick={ this.handleNavigationClick.bind(this, 'shop') } >Shop for stuff you might be interested in</div>
+          <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >Look at all your notes</div>
+        </div>
       )
     }
   }
