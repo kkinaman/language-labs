@@ -25,11 +25,22 @@ Meteor.startup(function () {
       });
     },
 
-    'addNote'({text, _id, date, noteType}) {
+    'addNote'({text, userId, date, noteType}) {
       Meteor.notes.insert(
         { 
           'text': text, 
-          'userId': _id, 
+          'userId': userId, 
+          'title': date, 
+          'noteType': noteType
+        }
+      )
+    },
+
+    'updateNote'({noteId, text, userId, date, noteType}) {
+      Meteor.notes.update(noteId,
+        { 
+          'text': text, 
+          'userId': userId, 
           'title': date, 
           'noteType': noteType
         }
