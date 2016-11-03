@@ -25,6 +25,15 @@ class Notes extends React.Component {
      
   }
 
+  newNote() {
+    this.setState({
+      'noteType': 'freeForm',
+      'currNote': '',
+      'viewAll': false
+    })
+    document.getElementById('note').value = '';
+  }
+
   saveNote() {
     if (this.state.noteType === 'freeForm') {
       if (this.state.currNote === '') {
@@ -61,8 +70,6 @@ class Notes extends React.Component {
         });
       }
 
-      document.getElementById('note').value = '';
-
     } else {
       var firstLang = this.props.user.profile.language.toLowerCase();
       var secondLang = this.props.user.profile.learning.toLowerCase();
@@ -86,24 +93,16 @@ class Notes extends React.Component {
           return console.log('error saving note to db:', err); 
         }
       });
-
-      document.getElementById('first-lang-text').value = '';
-      document.getElementById('second-lang-text').value = '';
     }
-
-    this.setState({currNote: ''});
   }
 
   render() {
+    
     return (
       <div className="user-profile">
         {
           this.state.viewAll ?
-            this.props.notes.map(note =>
-              <div>
-                <text onClick={this.displayNote.bind(this, note)}>{note.title}</text>
-              </div>
-            )
+            <NotesList notes={this.props.notes} displayNote={this.displayNote.bind(this)}/>
           :
           this.state.noteType === 'freeForm' ?
             <textarea id='note' className="active-note" placeholder="Type your notes here" defaultValue={this.state.currNote.text}>
@@ -118,11 +117,34 @@ class Notes extends React.Component {
           <div className="button-wrapper">
             <button onClick={this.saveNote.bind(this)}>Save</button>
           </div>
+          <div className="button-wrapper">
+            <button onClick={this.newNote.bind(this)}>New</button>
+          </div>
         </div>
       </div>
     )
   }
 
+}
+
+class NotesList extends React.Component {
+  constructor(props) {
+    super(props);
+  }
+
+  render() {
+    return (
+      <div>
+      {
+        this.props.notes.map(note => (
+          <div>
+            <text onClick={this.props.displayNote.bind(null, note)}>{note.title}</text>
+          </div>
+        ))
+      }
+      </div>
+    );
+  }
 }
 
 class Flashcard extends React.Component {
