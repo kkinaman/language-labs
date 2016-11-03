@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import Media from '../MediaStreamRecorder';
+import { HTTP } from 'meteor/http';
 
 class Transcriber extends React.Component {
   constructor(props) {
@@ -78,6 +79,30 @@ class Transcriber extends React.Component {
     console.debug("Terminated connections");
   }
 
+  GenerateToken(callbackIfSuccessfulToken) {
+      var accToken = "";
+
+      var xhttp = new XMLHttpRequest();
+      // *** USE YOUR OWN SERVER TO RETURN A VALID ADM TOKEN ***
+      // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
+      // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
+      xhttp.open("GET", "http://localhost:3000/token", true);
+      
+      xhttp.onreadystatechange = function () {
+          if (xhttp.readyState == 4 && xhttp.status == 200) {
+              accToken = xhttp.responseText;
+
+              console.debug("Token: " + accToken);
+              if (typeof callbackIfSuccessfulToken === 'function')
+                  callbackIfSuccessfulToken(accToken);
+              else
+                  console.error("callbackIfSuccessfulToken is not a function");
+          }
+      }
+      
+      xhttp.send();
+  }
+
   StartSession() {
     if (navigator.getUserMedia) {
         navigator.getUserMedia({ audio: true }, (streamArg) => {
@@ -86,11 +111,8 @@ class Transcriber extends React.Component {
             if (this.state.stream)
             {
                 console.debug("Starting session...");
-                //Update state
-                // ongoingsubtitling = true;
-                // GenerateToken(SetupWebConnection);
-                //TOKEN GOES HERE
-                this.SetupWebConnection('eyJ0eXAiOiJKV1QiLCJhbGciOiJIUzI1NiJ9.eyJzY29wZSI6Imh0dHBzOi8vZGV2Lm1pY3Jvc29mdHRyYW5zbGF0b3IuY29tLyIsInN1YnNjcmlwdGlvbi1pZCI6IjIyODMzNmZiMmFiODQ4ZTdhYjBhNzM2YThmOGJjMGRhIiwicHJvZHVjdC1pZCI6IlNwZWVjaFRyYW5zbGF0b3IuRjAiLCJjb2duaXRpdmUtc2VydmljZXMtZW5kcG9pbnQiOiJodHRwczovL2FwaS5jb2duaXRpdmUubWljcm9zb2Z0LmNvbS9pbnRlcm5hbC92MS4wLyIsImF6dXJlLXJlc291cmNlLWlkIjoiL3N1YnNjcmlwdGlvbnMvZDc4MjEwOTgtMDk5Yy00OTExLTk5OTItNGY3YWM1OTYyOGMyL3Jlc291cmNlR3JvdXBzL2xhbmd1YWdlLWxhYnMvcHJvdmlkZXJzL01pY3Jvc29mdC5Db2duaXRpdmVTZXJ2aWNlcy9hY2NvdW50cy9pbnZhbGlkLW1lbW9yaWVzIiwiaXNzIjoidXJuOm1zLmNvZ25pdGl2ZXNlcnZpY2VzIiwiYXVkIjoidXJuOm1zLm1pY3Jvc29mdHRyYW5zbGF0b3IiLCJleHAiOjE0NzgxMTMzNDF9.XdeEaLO-GluDZ8ZTYyFCvM__3TL4enVHP0QSgHio1VQ');
+
+                this.GenerateToken(this.SetupWebConnection.bind(this));
     
             } else {
                console.error("stream is null");
@@ -122,10 +144,6 @@ class Transcriber extends React.Component {
     
             this.setState({transcript: response.recognition + '(' + response.translation + ')'});
             this.render();
-            // var hr = document.createElement('hr');
-            // var parent = document.getElementById("output");
-            // parent.appendChild(hr);
-            // parent.appendChild(elem);
     }
     
     this.state.mediaRecorder.ondataavailable = (blob) => {
@@ -249,68 +267,3 @@ class Transcriber extends React.Component {
 
 export default Transcriber;
 
-/*
-function getAdmToken(){
-    var post_data = querystring.stringify({
-        'client_id': 'invalid-memories', //your client id,
-        'scope': 'http://api.microsofttranslator.com',
-        'grant_type': 'client_credentials',
-        'client_secret': '5Bpf0b5tDzFUGiFNL8lyLJjEyQKUvN2pQo2j8piaxvo=' // your client secret
-    });
-    
-    var post_options = {
-        host: 'datamarket.accesscontrol.windows.net',
-        path: '/v2/OAuth2-13',
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': Buffer.byteLength(post_data)
-        }
-    };
-    
-    
-    var post_req = https.request(post_options, function (res) {
-        res.setEncoding('utf8');
-        if (res.statusCode == 200) {
-            res.on('data', function (chunk) {
-                accToken = JSON.parse(chunk).access_token;
-                //log('[generateAdmToken] Success');
-            });
-        }
-        else {
-            accToken = ERR_REQ_FAIL;
-            //log('[generateAdmToken] Failed with status code ' + res.statusCode, "error");
-        }
-    });
-    
-    post_req.write(post_data);
-    post_req.end();
-
-}
-
-function GenerateToken(callbackIfSuccessfulToken) {
-    var accToken = "";
-
-    var xhttp = new XMLHttpRequest();
-    // *** USE YOUR OWN SERVER TO RETURN A VALID ADM TOKEN ***
-    // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
-    // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
-    // xhttp.open("GET", "http://localhost:3000/token", true);
-    xhttp.open('GET', 'https://api.cognitive.microsoft.com/sts/v1.0/issueToken', true);
-    
-    xhttp.onreadystatechange = function () {
-        if (xhttp.readyState == 4 && xhttp.status == 200) {
-            accToken = xhttp.responseText;
-
-            console.debug("Token: " + accToken);
-            if (typeof callbackIfSuccessfulToken === 'function')
-                callbackIfSuccessfulToken(accToken);
-            else
-                console.error("callbackIfSuccessfulToken is not a function");
-        }
-    }
-    
-    xhttp.send();
-
-}
-*/
