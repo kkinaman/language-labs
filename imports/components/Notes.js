@@ -6,30 +6,37 @@ class Notes extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'viewAll': false,
+      // 'viewAll': false,
       'noteType': 'freeForm',
       'currNote': ''
     }
   }
 
-  viewNotes() {
-    this.setState({'viewAll': true});
-  }
+  // viewNotes() {
+  //   this.setState({'viewAll': true});
+  // }
 
   displayNote(note) {
     this.setState({
-      'viewAll': false,
+      // 'viewAll': false,
       'noteType': note.noteType,
       'currNote': note
     });
-     
+  }
+
+  viewFlashcards() {
+
+  }
+
+  viewNotes() {
+
   }
 
   newNote() {
     this.setState({
       'noteType': 'freeForm',
       'currNote': '',
-      'viewAll': false
+      // 'viewAll': false
     })
     document.getElementById('note').value = '';
   }
@@ -100,25 +107,21 @@ class Notes extends React.Component {
     
     return (
       <div className="notes">
+        <div className='saved-notes'>
+          <NotesList notes={this.props.notes} displayNote={this.displayNote.bind(this)}/>
+        </div>
         {
-          this.state.viewAll ?
-            <NotesList notes={this.props.notes} displayNote={this.displayNote.bind(this)}/>
-          :
           this.state.noteType === 'freeForm' ?
             <textarea id='note' className="active-note" placeholder="Type your notes here" defaultValue={this.state.currNote.text}>
             </textarea>
           :
             <Flashcard note={this.state.currNote} user={this.props.user}/>
         }
-        <div>
+        <div className='notes-buttons'>
           <div className="button-wrapper">
-            <button onClick={this.viewNotes.bind(this)}>View all</button>
-          </div>
-          <div className="button-wrapper">
+            <button onClick={this.viewFlashcards.bind(this)}>Vocab</button>
+            <button onClick={this.viewNotes.bind(this)}>Notes</button>
             <button onClick={this.saveNote.bind(this)}>Save</button>
-          </div>
-          <div className="button-wrapper">
-            <button onClick={this.newNote.bind(this)}>New</button>
           </div>
         </div>
       </div>

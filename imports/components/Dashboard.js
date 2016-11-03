@@ -175,7 +175,7 @@ class Dashboard extends React.Component {
             <Notes notes={this.props.notes} user={this.props.user}/>
           </div>
           <div className='bottomRight'>
-            <div className='button-wrapper'>
+            <div className='waiting-button-wrapper'>
               {!this.props.onlineUsers[0] &&
                 <button>Waiting</button>
               }

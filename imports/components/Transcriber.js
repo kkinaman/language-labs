@@ -225,9 +225,11 @@ class Transcriber extends React.Component {
   render() {
     return (
       <div>
-        <button onClick={this.StartSession.bind(this)}>Start</button>
-        <button onClick={this.StopSession.bind(this)}>Stop</button>
-        <button onClick={this.saveNote.bind(this)}>Save</button>
+        <div className="button-wrapper">
+          <button onClick={this.StartSession.bind(this)}>Start</button>
+          <button onClick={this.StopSession.bind(this)}>Stop</button>
+          <button oncloseick={this.saveNote.bind(this)}>Save</button>
+        </div>
         <div className='output'>{this.state.primaryTranscript}</div>
         <div className='output'>{this.state.secondaryTranscript}</div>
 
