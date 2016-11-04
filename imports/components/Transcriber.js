@@ -8,8 +8,10 @@ class Transcriber extends React.Component {
     super(props)
 
     this.state = {
-      primaryTranscript: '',
-      secondaryTranscript: '',
+      // primaryTranscript: '',
+      // secondaryTranscript: '',
+      transcriptions: [],
+      selectedTranscript: {},
       sourceLang: 'en',
       sourceLangName: "English",
       targetLang: "es",
@@ -86,7 +88,8 @@ class Transcriber extends React.Component {
 
     // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
     // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
-    xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
+    // xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
+    xhttp.open("GET", "http://localhost:3000/token", true);
     
     xhttp.onreadystatechange = function () {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -140,7 +143,12 @@ class Transcriber extends React.Component {
         firstTranslation = false;
       }
   
-      this.setState({primaryTranscript: response.recognition, secondaryTranscript: response.translation});
+      var transcriptions = this.state.transcriptions;
+      transcriptions.unshift({
+              primaryTranscript: response.recognition, 
+              secondaryTranscript: response.translation
+            });
+      this.setState({transcriptions: transcriptions});
       this.render();
     }
     
@@ -208,39 +216,70 @@ class Transcriber extends React.Component {
     xmlhttp.send();
   }
 
-  saveNote() {
-    var sourceLang = this.state.sourceLangName.toLowerCase();
-    var targetLang = this.state.targetLangName.toLowerCase();
-    var text = {};
-    text[sourceLang] = this.state.primaryTranscript;
-    text[targetLang] = this.state.secondaryTranscript;
-    Meteor.call('addNote', {
-      'text': text,
-      'userId': Meteor.userId(),
-      'date': new Date().toString().slice(0, 24),
-      'noteType': 'flashcard'
-    }, (err, res) => {
-      if (err) { 
-        console.log('error saving note to db:', err);
-      }
-    });
+  saveTranscript() {
+    // var sourceLang = this.state.sourceLangName.toLowerCase();
+    // var targetLang = this.state.targetLangName.toLowerCase();
+    // var text = {};
+    // text[sourceLang] = this.state.primaryTranscript;
+    // text[targetLang] = this.state.secondaryTranscript;
+    // Meteor.call('addNote', {
+    //   'text': text,
+    //   'userId': Meteor.userId(),
+    //   'date': new Date().toString().slice(0, 24),
+    //   'noteType': 'flashcard'
+    // }, (err, res) => {
+    //   if (err) { 
+    //     console.log('error saving note to db:', err);
+    //   }
+    // });
+  }
+
+  selectTranscript(event) {
+    console.log(event);
+    // this.setState({
+    //   selectedTranscript: {
+    //     event.target.
+    //   }
+    // });
   }
 
   render() {
     return (
-      <div>
-        <div className="button-wrapper">
-          <button onClick={this.StartSession.bind(this)}>Start</button>
-          <button onClick={this.StopSession.bind(this)}>Stop</button>
-          <button onClick={this.saveNote.bind(this)}>Save</button>
+      <div className='transcriptionContent'>
+        <div className='transcriptions'>
+          <table>
+            {
+              this.state.transcriptions.map(transcript => (
+                <tr className='transcript' onClick={this.selectTranscript.bind(this)}>
+                  <td><text className='native-transcript'>{transcript.primaryTranscript}</text></td>
+                  <td><text className='learning-transcript'>{transcript.secondaryTranscript}</text></td>
+                </tr>
+              ))
+            }
+          </table>
+        </div>  
+        <div className="button-wrapper transcribeButtons">
+          <button id='start' onClick={this.StartSession.bind(this)}>Start</button>
+          <button id='stop' onClick={this.StopSession.bind(this)}>Stop</button>
+          <button id='saveButton' onClick={this.saveTranscript.bind(this)}>Save</button>
         </div>
-        <div className='output'>{this.state.primaryTranscript}</div>
-        <div className='output'>{this.state.secondaryTranscript}</div>
-
       </div>
     )
   }
 }
 
 export default Transcriber;
+
+/*
+<div className='transcriptions'>
+{
+  this.state.transcriptions.map(transcript => (
+    <div className='transcript' onClick={this.selectTranscript.bind(this)}>
+      <text className='native-transcript'>{transcript.primaryTranscript}</text><hr></hr>
+      <text className='learning-transcript'>{transcript.secondaryTranscript}</text>
+    </div>
+  ))
+}
+</div>
+*/
 

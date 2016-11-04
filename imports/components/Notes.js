@@ -96,7 +96,7 @@ class Notes extends React.Component {
               <FlashcardsList notes={this.props.notes} user={this.props.user}/>
             </div>
             <form>
-              <label >Add a translation</label><br/>
+              <label >Add a flashcard</label><br/>
               <div className='inputs'>
                 <input placeholder={this.props.user.profile.language} 
                         value={this.state.nativeText} 
@@ -110,7 +110,7 @@ class Notes extends React.Component {
       }
         <div className='notes-buttons'>
           <div className="button-wrapper floatLeft">
-            <button onClick={this.viewFlashcards.bind(this)}>Vocab</button>
+            <button onClick={this.viewFlashcards.bind(this)}>Flashcards</button>
             <button onClick={this.viewNotes.bind(this)}>Notes</button>
           </div>
           <div className="button-wrapper floatRight">
