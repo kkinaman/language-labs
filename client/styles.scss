@@ -413,6 +413,17 @@ body {
           .learning-transcript {
             font-style: italic;
           }
+
+          .waitingMessage {
+            height: 100%;
+            width: 100%;
+            display: flex;
+            flex: 1;
+            justify-content: space-around;
+            align-items: center;
+            font-size: 24px;
+            color: #aaa;
+          }
         }
       }
     }
@@ -459,6 +470,8 @@ body {
           textarea {
             width: 98%;
             height: 15%;
+            outline: none !important;
+            border: 1px solid #ccc;
           }
 
           form {
@@ -482,7 +495,7 @@ body {
             margin: 5px;
             padding: 5px;
             width: 40%;
-            border: 1px solid #eee;
+            border: 1px solid #ccc;
             font-size: 14px;
           }
         }
@@ -566,7 +579,7 @@ table {
   border-collapse: collapse;
 
   tr:nth-child(odd) td {
-    background-color: #f6f6f6;
+    background-color: #F1FAF1;
   }
 
   th {
@@ -590,8 +603,7 @@ table {
   }
 
   .selected td {
-    background-color: #5fa9d9 !important;
-    color: white;
+    background-color: #ddd !important;
   }
 }
 
@@ -617,6 +629,34 @@ table {
       color: white;
     }
   }
+
+  /*#flashcards.selected {
+    background: #3BAF5A;
+    border: #3BAF5A;
+    color: white;
+  }
+
+  #flashcards:hover {
+    background: #3BAF5A;
+    border: #3BAF5A;
+    color: white;
+  }*/
+
+  .selected {
+    background: $blue;
+    color: white;
+  }
+
+  #save {
+    color: white;
+    background-color: #999;
+    border: 2px solid #999;
+    
+    &:hover {
+      background-color: #666;
+      border: 2px solid #666;
+    }
+  }
 }
 
 .transcribeButtons {
@@ -629,11 +669,11 @@ table {
   }
 
   #start {
-    color: #31AE36;
-    border-color: #31AE36;
+    color: #3BAF5A;
+    border-color: #3BAF5A;
 
     &:hover {
-      background: #31AE36;
+      background: #3BAF5A;
     }
   }
 
@@ -646,12 +686,7 @@ table {
     }
   }
 
-  #saveButton {
-    justify-content: flex-end;
-    position: absolute;
-    bottom: 0;
-    margin-bottom: 15px;
-  }
+  
 
   button:hover, #start:hover, #stop:hover {
     color: white;
@@ -664,4 +699,9 @@ table {
 
 .floatRight {
   float: right;
+}
+
+.floatBottom {
+  position: absolute;
+  bottom: 10px;
 }

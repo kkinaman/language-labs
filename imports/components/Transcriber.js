@@ -10,6 +10,7 @@ class Transcriber extends React.Component {
     this.state = {
       transcriptions: [],
       selectedTranscript: {},
+      hasTranscriptions: false,
       listening: false,
       sourceLang: 'en',
       sourceLangName: "English",
@@ -143,13 +144,13 @@ class Transcriber extends React.Component {
       if (firstTranslation) {
         firstTranslation = false;
       }
-  
+
       var transcriptions = this.state.transcriptions;
       transcriptions.unshift({
               native: response.recognition, 
               learning: response.translation
             });
-      this.setState({transcriptions: transcriptions});
+      this.setState({transcriptions: transcriptions, hasTranscriptions: true});
       this.render();
     }
     
@@ -249,20 +250,29 @@ class Transcriber extends React.Component {
     });
   }
 
+  clearTranscripts() {
+
+  }
+
   render() {
     return (
       <div className='transcriptionContent'>
         <div className='transcriptions'>
-          <table>
-            {
-              this.state.transcriptions.map(transcript => (
-                <tr onClick={this.selectTranscript.bind(this)}>
-                  <td><text className='native-transcript'>{transcript.native}</text></td>
-                  <td><text className='learning-transcript'>{transcript.learning}</text></td>
-                </tr>
-              ))
-            }
-          </table>
+          {
+            this.state.hasTranscriptions ? (
+              <table>
+                {
+                  this.state.transcriptions.map(transcript => (
+                    <tr onClick={this.selectTranscript.bind(this)}>
+                      <td><text className='native-transcript'>{transcript.native}</text></td>
+                      <td><text className='learning-transcript'>{transcript.learning}</text></td>
+                    </tr>
+                  ))
+                }
+              </table>
+            ) : this.state.listening ? <text className='waitingMessage'>Listening...</text>
+                  : <text className='waitingMessage'>Press start to begin transcribing</text>
+          }
         </div>  
         <div className="button-wrapper transcribeButtons">
           {
@@ -271,9 +281,9 @@ class Transcriber extends React.Component {
               :
               <button id='start' onClick={this.StartSession.bind(this)}>Start</button>
           }
+          <button id='clear' onClick={this.clearTranscripts.bind(this)}>Clear</button>
           
-          
-          <button id='saveButton' onClick={this.saveTranscript.bind(this)}>Save</button>
+          <button id='save' className='floatBottom' onClick={this.saveTranscript.bind(this)}>Save</button>
         </div>
       </div>
     )
