@@ -10,6 +10,7 @@ class Transcriber extends React.Component {
     this.state = {
       transcriptions: [],
       selectedTranscript: {},
+      listening: false,
       sourceLang: 'en',
       sourceLangName: "English",
       targetLang: "es",
@@ -59,6 +60,7 @@ class Transcriber extends React.Component {
 
   StopSession() {
     this.TerminateConnections(true);
+    this.setState({listening: false});
   }
 
   TerminateConnections(closeStream) {
@@ -112,6 +114,7 @@ class Transcriber extends React.Component {
 
         if (this.state.stream) {
           console.debug("Starting session...");
+          this.setState({listening: true});
 
           this.GenerateToken(this.SetupWebConnection.bind(this));
         } else {
@@ -262,8 +265,14 @@ class Transcriber extends React.Component {
           </table>
         </div>  
         <div className="button-wrapper transcribeButtons">
-          <button id='start' onClick={this.StartSession.bind(this)}>Start</button>
-          <button id='stop' onClick={this.StopSession.bind(this)}>Stop</button>
+          {
+            this.state.listening ? 
+              <button id='stop' onClick={this.StopSession.bind(this)}>Stop</button>
+              :
+              <button id='start' onClick={this.StartSession.bind(this)}>Start</button>
+          }
+          
+          
           <button id='saveButton' onClick={this.saveTranscript.bind(this)}>Save</button>
         </div>
       </div>
