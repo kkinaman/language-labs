@@ -31,20 +31,21 @@ class Notes extends React.Component {
   saveNote() {
     if (this.state.noteType === 'freeForm') {
       var text = document.getElementById('note').value;
-      document.getElementById('note').value = '';
+      if (text.length) {
+        document.getElementById('note').value = '';
 
-      Meteor.call('addNote', {
-        'text': text,
-        'userId': Meteor.userId(),
-        'date': new Date().toString().slice(0, 24),
-        'noteType': 'freeForm'
-      }, 
-      (err, res) => {
-        if (err) { 
-          return console.log('error saving note to db:', err);
-        }
-      });
-
+        Meteor.call('addNote', {
+          'text': text,
+          'userId': Meteor.userId(),
+          'date': new Date().toString().slice(0, 24),
+          'noteType': 'freeForm'
+        }, 
+        (err, res) => {
+          if (err) { 
+            return console.log('error saving note to db:', err);
+          }
+        });
+      }
     } else {
       var sourceLang = this.props.user.profile.language.toLowerCase();
       var targetLang = this.props.user.profile.learning.toLowerCase();
