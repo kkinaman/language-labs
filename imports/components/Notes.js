@@ -6,22 +6,26 @@ class Notes extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      'noteType': 'freeForm',
+      'noteType': 'flashcard',
       'nativeText': '',
       'learningText': ''
     }
   }
 
-  viewFlashcards() {
+  viewFlashcards(event) {
     this.setState({
       'noteType': 'flashcard'
-    })
+    });
+    $(event.currentTarget).closest('.button-wrapper')[0].childNodes.forEach(button => $(button).removeClass('selected'));
+    $(event.currentTarget).addClass('selected');
   }
 
-  viewNotes() {
+  viewNotes(event) {
     this.setState({
       'noteType': 'freeForm'
-    })
+    });
+    $(event.currentTarget).closest('.button-wrapper')[0].childNodes.forEach(button => $(button).removeClass('selected'));
+    $(event.currentTarget).addClass('selected');
   }
 
   saveNote() {
@@ -110,11 +114,11 @@ class Notes extends React.Component {
       }
         <div className='notes-buttons'>
           <div className="button-wrapper floatLeft">
-            <button onClick={this.viewFlashcards.bind(this)}>Flashcards</button>
+            <button className='selected' id='flashcards' onClick={this.viewFlashcards.bind(this)}>Flashcards</button>
             <button onClick={this.viewNotes.bind(this)}>Notes</button>
           </div>
           <div className="button-wrapper floatRight">
-            <button onClick={this.saveNote.bind(this)}>Save</button>
+            <button id='save' onClick={this.saveNote.bind(this)}>Save</button>
           </div>
         </div>
       </div>
