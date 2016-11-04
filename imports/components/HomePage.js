@@ -3,6 +3,7 @@ import { Meteor } from 'meteor/meteor';
 import AccountsUIWrapper from './accounts'
 
 const HomePage = () => (
+
   <div className='home-page'>
     <span className='sign-in'>
       <AccountsUIWrapper />
