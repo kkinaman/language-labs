@@ -234,6 +234,7 @@ class Transcriber extends React.Component {
 
   selectTranscript(event) {
     $clicked = $(event.currentTarget);
+    $clicked.closest('table')[0].childNodes.forEach(row => $(row).removeClass('selected'));
     $clicked.addClass('selected');
     var native = $clicked.find('.native-transcript')[0].innerHTML;
     var learning = $clicked.find('.learning-transcript')[0].innerHTML;
