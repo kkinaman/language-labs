@@ -649,12 +649,12 @@ table {
 
   #save {
     color: white;
-    background-color: #999;
-    border: 2px solid #999;
+    background-color: #869191;
+    border: 2px solid #869191;
     
     &:hover {
-      background-color: #666;
-      border: 2px solid #666;
+      background-color: #596869;
+      border: 2px solid #596869;
     }
   }
 }
@@ -686,9 +686,16 @@ table {
     }
   }
 
-  
+  #clear {
+    color: #D1D5D6;
+    border-color: #D1D5D6;
 
-  button:hover, #start:hover, #stop:hover {
+    &:hover {
+      background: #D1D5D6;
+    }
+  }
+
+  button:hover, #start:hover, #stop:hover, #clear:hover {
     color: white;
   }
 }

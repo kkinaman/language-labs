@@ -219,21 +219,23 @@ class Transcriber extends React.Component {
   }
 
   saveTranscript() {
-    var sourceLang = this.state.sourceLangName.toLowerCase();
-    var targetLang = this.state.targetLangName.toLowerCase();
-    var text = {};
-    text[sourceLang] = this.state.selectedTranscript.native;
-    text[targetLang] = this.state.selectedTranscript.learning;
-    Meteor.call('addNote', {
-      'text': text,
-      'userId': Meteor.userId(),
-      'date': new Date().toString().slice(0, 24),
-      'noteType': 'flashcard'
-    }, (err, res) => {
-      if (err) { 
-        console.log('error saving note to db:', err);
-      }
-    });
+    if (Object.keys(this.state.selectedTranscript).length) {
+      var sourceLang = this.state.sourceLangName.toLowerCase();
+      var targetLang = this.state.targetLangName.toLowerCase();
+      var text = {};
+      text[sourceLang] = this.state.selectedTranscript.native;
+      text[targetLang] = this.state.selectedTranscript.learning;
+      Meteor.call('addNote', {
+        'text': text,
+        'userId': Meteor.userId(),
+        'date': new Date().toString().slice(0, 24),
+        'noteType': 'flashcard'
+      }, (err, res) => {
+        if (err) { 
+          console.log('error saving note to db:', err);
+        }
+      });
+    }
   }
 
   selectTranscript(event) {
@@ -251,7 +253,11 @@ class Transcriber extends React.Component {
   }
 
   clearTranscripts() {
-
+    this.setState({
+      transcriptions: [],
+      selectedTranscript: {},
+      hasTranscriptions: false,
+    });
   }
 
   render() {
