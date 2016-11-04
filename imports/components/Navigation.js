@@ -4,6 +4,7 @@ import Dashboard      from './Dashboard';
 import NotesPage      from './NotesPage';
 import ProfilePage    from './ProfilePage';
 import ShopPage       from './ShopPage';
+import AmazonAd       from './AmazonAd';
 
 class Navigation extends React.Component {
   constructor(props) {
@@ -48,11 +49,14 @@ class Navigation extends React.Component {
       );
     } else {
       return (
-        <div className='navigation-list'>
-          <div onClick={ this.handleNavigationClick.bind(this, 'video') } >Start a conversation</div>
-          <div onClick={ this.handleNavigationClick.bind(this, 'profile') } >Edit your profile</div>
-          <div onClick={ this.handleNavigationClick.bind(this, 'shop') } >Shop </div>
-          <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >View all notes</div>
+        <div>
+          <AmazonAd />
+          <div className='navigation-list'>
+            <div onClick={ this.handleNavigationClick.bind(this, 'video') } >Start a conversation</div>
+            <div onClick={ this.handleNavigationClick.bind(this, 'profile') } >Edit your profile</div>
+            <div onClick={ this.handleNavigationClick.bind(this, 'shop') } >Shop </div>
+            <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >View all notes</div>
+          </div>
         </div>
       )
     }
