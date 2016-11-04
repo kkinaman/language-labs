@@ -563,6 +563,7 @@ table {
   width: 100%;
   table-layout: fixed;
   padding: 0;
+  border-collapse: collapse;
 
   tr:nth-child(odd) td {
     background-color: #f6f6f6;
@@ -586,6 +587,11 @@ table {
 
   td:nth-child(2) {
     padding-left: 20px;
+  }
+
+  .selected td {
+    background-color: #5fa9d9 !important;
+    color: white;
   }
 }
 

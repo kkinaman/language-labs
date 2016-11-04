@@ -8,8 +8,6 @@ class Transcriber extends React.Component {
     super(props)
 
     this.state = {
-      // primaryTranscript: '',
-      // secondaryTranscript: '',
       transcriptions: [],
       selectedTranscript: {},
       sourceLang: 'en',
@@ -145,8 +143,8 @@ class Transcriber extends React.Component {
   
       var transcriptions = this.state.transcriptions;
       transcriptions.unshift({
-              primaryTranscript: response.recognition, 
-              secondaryTranscript: response.translation
+              native: response.recognition, 
+              learning: response.translation
             });
       this.setState({transcriptions: transcriptions});
       this.render();
@@ -217,30 +215,34 @@ class Transcriber extends React.Component {
   }
 
   saveTranscript() {
-    // var sourceLang = this.state.sourceLangName.toLowerCase();
-    // var targetLang = this.state.targetLangName.toLowerCase();
-    // var text = {};
-    // text[sourceLang] = this.state.primaryTranscript;
-    // text[targetLang] = this.state.secondaryTranscript;
-    // Meteor.call('addNote', {
-    //   'text': text,
-    //   'userId': Meteor.userId(),
-    //   'date': new Date().toString().slice(0, 24),
-    //   'noteType': 'flashcard'
-    // }, (err, res) => {
-    //   if (err) { 
-    //     console.log('error saving note to db:', err);
-    //   }
-    // });
+    var sourceLang = this.state.sourceLangName.toLowerCase();
+    var targetLang = this.state.targetLangName.toLowerCase();
+    var text = {};
+    text[sourceLang] = this.state.selectedTranscript.native;
+    text[targetLang] = this.state.selectedTranscript.learning;
+    Meteor.call('addNote', {
+      'text': text,
+      'userId': Meteor.userId(),
+      'date': new Date().toString().slice(0, 24),
+      'noteType': 'flashcard'
+    }, (err, res) => {
+      if (err) { 
+        console.log('error saving note to db:', err);
+      }
+    });
   }
 
   selectTranscript(event) {
-    console.log(event);
-    // this.setState({
-    //   selectedTranscript: {
-    //     event.target.
-    //   }
-    // });
+    $clicked = $(event.currentTarget);
+    $clicked.addClass('selected');
+    var native = $clicked.find('.native-transcript')[0].innerHTML;
+    var learning = $clicked.find('.learning-transcript')[0].innerHTML;
+    this.setState({
+      selectedTranscript: {
+        native: native,
+        learning: learning
+      }
+    });
   }
 
   render() {
@@ -250,9 +252,9 @@ class Transcriber extends React.Component {
           <table>
             {
               this.state.transcriptions.map(transcript => (
-                <tr className='transcript' onClick={this.selectTranscript.bind(this)}>
-                  <td><text className='native-transcript'>{transcript.primaryTranscript}</text></td>
-                  <td><text className='learning-transcript'>{transcript.secondaryTranscript}</text></td>
+                <tr onClick={this.selectTranscript.bind(this)}>
+                  <td><text className='native-transcript'>{transcript.native}</text></td>
+                  <td><text className='learning-transcript'>{transcript.learning}</text></td>
                 </tr>
               ))
             }
@@ -275,8 +277,8 @@ export default Transcriber;
 {
   this.state.transcriptions.map(transcript => (
     <div className='transcript' onClick={this.selectTranscript.bind(this)}>
-      <text className='native-transcript'>{transcript.primaryTranscript}</text><hr></hr>
-      <text className='learning-transcript'>{transcript.secondaryTranscript}</text>
+      <text className='native-transcript'>{transcript.native}</text><hr></hr>
+      <text className='learning-transcript'>{transcript.learning}</text>
     </div>
   ))
 }
