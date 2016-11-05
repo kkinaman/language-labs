@@ -29,8 +29,7 @@ class Dashboard extends React.Component {
       callDone: false,
       callLoading: false,
       partner: false,
-      mediaRecorder: {},
-      allBlobs: []
+      mediaRecorder: {}
     };
 
     this.startChat.bind(this);
@@ -39,6 +38,8 @@ class Dashboard extends React.Component {
 
   startChat(users, peer) {
     // save context
+    var allBlobs = [];
+
     var dashboard = this;
 
     // get html video elements
@@ -56,21 +57,29 @@ class Dashboard extends React.Component {
       // show own videostream of user
       myVideo.src = URL.createObjectURL(stream);
 
-      var mediaRecorder = new MediaRecorder(stream);
+      var options = {mimeType: 'video/webm', bitsPerSecond: 100000};
+      var mediaRecorder = new MediaRecorder(stream, options);
+
       this.setState({mediaRecorder: mediaRecorder});
 
-      this.state.mediaRecorder.start();
+      // time in start is how often events will be fired
+      this.state.mediaRecorder.start(10);
 
-      this.state.mediaRecorder.ondataavailable = (blob) => {
-        this.setState({allBlobs: this.state.allBlobs.concat([blob])});
+      console.log('Created MediaRecorder', mediaRecorder, 'with options', options);
+
+      this.state.mediaRecorder.ondataavailable = (event) => {
+        if (event.data && event.data.size > 0) {
+          // console.log('blob created', event.data);
+          allBlobs.push(event.data);
+        }
       }
 
       this.state.mediaRecorder.onstop = () => {
         console.log('media recorder closed');
-        var fullBlob = new Blob(this.state.allBlobs, {type: 'video/webm'});
-        this.setState({allBlobs: []});
+        var fullBlob = new Blob(allBlobs, {type: 'video/webm'});
+        allBlobs = [];
         console.log('created new blob', fullBlob);
-        var params = {Bucket: "invalidmemories", Key: "arealvid.webm", Body: fullBlob};
+        var params = {Bucket: "invalidmemories", Key: "arealvid" + fullBlob.size + ".webm", Body: fullBlob};
         s3.upload(params, (err, data) => {
           if (err) {
             console.log('err uploading ', err);
@@ -144,8 +153,10 @@ class Dashboard extends React.Component {
       currentCall: false,
       callDone: true 
     });
-
+    
+    // stop recorder if hasnt already stopped
     this.state.mediaRecorder.stop();
+    
   }
 
   toggleLoading(loading) {
