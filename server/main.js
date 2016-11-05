@@ -54,17 +54,10 @@ Meteor.startup(function () {
       )
     },
 
-    'getVideos'() {
-      console.log('yo');
-      params = {Bucket: 'invalidmemories', Key: 'arealvid95996.webm'}
-      s3.getObject(params, (err, data) => {
-        if (err) {
-          console.log('err getting vid', err);
-        } else {
-          console.log('got vid', data);
-        }
-      });
-    }
+    // 'getVideos'() {
+    //   console.log('yo');
+      
+    // }
   });
 
   WebApp.connectHandlers.use("/token", function(req, res, next) {

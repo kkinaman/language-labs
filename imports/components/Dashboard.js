@@ -35,6 +35,8 @@ class Dashboard extends React.Component {
 
     this.startChat.bind(this);
     this.endChat.bind(this);
+
+    this.myVideo;
   }
 
   startChat(users, peer) {
@@ -44,6 +46,7 @@ class Dashboard extends React.Component {
     var dashboard = this;
 
     // get html video elements
+    this.myVideo = this.refs.myVideo;
     var myVideo = this.refs.myVideo;
     var theirVideo = this.refs.theirVideo;
     // var recordedVideo = this.refs.recordedVideo;
@@ -85,11 +88,11 @@ class Dashboard extends React.Component {
 
       this.state.mediaRecorder.onstop = () => {
         console.log('media recorder closed');
-        var fullBlob = new Blob(allBlobs, {type: 'video/webm'});
+        var fullBlob = new Blob(allBlobs);
         this.setState({fullBlob: fullBlob});
         allBlobs = [];
         console.log('created new blob', fullBlob);
-        var params = {ACL: "public-read", Bucket: "invalidmemories", Key: "arealvid" + fullBlob.size + ".webm", Body: fullBlob};
+        var params = {ACL: "public-read", Bucket: "invalidmemories", Key: "arealvid" + fullBlob.size, Body: fullBlob};
         // var s3AndCb = (params, cb) => {
         //   s3.upload(params, (err, data) => {
         //     if (err) {
@@ -102,7 +105,7 @@ class Dashboard extends React.Component {
         //   });
         // };
         // s3AndCb(params, renderVideo);
-
+        // this.myVideo.src = URL.createObjectURL(fullBlob);
         s3.upload(params, (err, data) => {
           if (err) {
             console.log('err uploading ', err);
@@ -115,8 +118,27 @@ class Dashboard extends React.Component {
         });
 
         console.log('attempting to render');
-        myVideo.src = URL.createObjectURL(fullBlob);
-        console.log('after render');
+        // Meteor.call('getVideos', (err, data) => {
+        //   if (err) {
+        //     console.log('err received', err);
+        //   } else {
+        //     console.log('got video', data);
+        //     myVideo.src = URL.createObjectURL(fullBlob);
+        //   }
+        // });
+        var getParams = {Bucket: 'invalidmemories', Key: 'arealvid223467'};
+        var videoUrl = URL;
+
+        s3.getObject(getParams, (err, data) => {
+          if (err) {
+            console.log('err getting vid', err);
+          } else {
+            console.log('got vid', JSON.parse(data.body));
+            var SUPERBLOB = new Blob([data.body]);
+            this.myVideo.src = videoUrl.createObjectURL(SUPERBLOB);
+            // this.renderVideo(data);
+          }
+        });
       }
 
 
@@ -213,10 +235,10 @@ class Dashboard extends React.Component {
     });
   }
 
-  renderVideo() {
+  renderVideo(data) {
     // var superBuffer = new Blob(this.state.fullBlob, {type: 'video/webm'});
-    // this.refs.myVideo.src = window.URL.createObjectURL(superBuffer);
     console.log('rendered');
+    this.myVideo.src = URL.createObjectURL(data);
   }
 
   // dont forget to add review back in
@@ -236,7 +258,7 @@ class Dashboard extends React.Component {
                     <Waiting />
                   }
                   <video ref='myVideo' id='myVideo' muted='true' autoPlay='true' 
-                    className={this.state.callLoading}></video>
+                    className={this.state.callLoading} src="https://s3-us-west-1.amazonaws.com/invalidmemories/arealvid208628.webm"></video>
                   <video ref='theirVideo' id='theirVideo' autoPlay='true'
                     className={this.state.callLoading ? 'hidden' : null}></video>
                 </div>
