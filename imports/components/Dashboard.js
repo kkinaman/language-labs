@@ -12,6 +12,12 @@ import Notes             from './Notes';
 import Transcriber       from './Transcriber';
 import NavigationWrapper from './NavigationWrapper';
 
+// initialize AWSbucket with my pwd that should not to server
+AWS.config = new AWS.Config({
+  accessKeyId: 'AKIAJK4R2PIDJYTBTWFA', secretAccessKey: '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', region: 'us-west-1'
+});
+var s3 = new AWS.S3();
+
 
 class Dashboard extends React.Component {
   constructor(props) {
@@ -22,7 +28,9 @@ class Dashboard extends React.Component {
       currentCall: false,
       callDone: false,
       callLoading: false,
-      partner: false
+      partner: false,
+      mediaRecorder: {},
+      allBlobs: []
     };
 
     this.startChat.bind(this);
@@ -38,7 +46,7 @@ class Dashboard extends React.Component {
     var theirVideo = this.refs.theirVideo;
     
     // get audio/video permissions
-    navigator.getUserMedia({ audio: true, video: true }, function (stream) {
+    navigator.getUserMedia({ audio: true, video: true }, (stream) => {
       // save your users own feed to state
       dashboard.setState({ localStream: stream });
 
@@ -47,6 +55,30 @@ class Dashboard extends React.Component {
 
       // show own videostream of user
       myVideo.src = URL.createObjectURL(stream);
+
+      var mediaRecorder = new MediaRecorder(stream);
+      this.setState({mediaRecorder: mediaRecorder});
+
+      this.state.mediaRecorder.start();
+
+      this.state.mediaRecorder.ondataavailable = (blob) => {
+        this.setState({allBlobs: this.state.allBlobs.concat([blob])});
+      }
+
+      this.state.mediaRecorder.onstop = () => {
+        console.log('media recorder closed');
+        var fullBlob = new Blob(this.state.allBlobs, {type: 'video/webm'});
+        this.setState({allBlobs: []});
+        console.log('created new blob', fullBlob);
+        var params = {Bucket: "invalidmemories", Key: "arealvid.webm", Body: fullBlob};
+        s3.upload(params, (err, data) => {
+          if (err) {
+            console.log('err uploading ', err);
+          } else {
+            console.log('success uploading', data);
+          }
+        });
+      }
 
       // give the current user a peerId and save their streamId
       Meteor.users.update({_id: Meteor.userId()}, {
@@ -112,6 +144,8 @@ class Dashboard extends React.Component {
       currentCall: false,
       callDone: true 
     });
+
+    this.state.mediaRecorder.stop();
   }
 
   toggleLoading(loading) {
