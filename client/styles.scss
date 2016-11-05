@@ -773,3 +773,14 @@ table {
   position: absolute;
   bottom: 10px;
 }
+
+.videoHistory {
+  .video-wrapper {
+    margin-left:50px;
+    .savedVideo {
+        height: 200px;
+        width: 200px;
+    }
+  }
+  
+}

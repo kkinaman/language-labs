@@ -4,7 +4,7 @@ import Dashboard          from './Dashboard';
 import NotesPage          from './NotesPage';
 import ProfilePage        from './ProfilePage';
 import VideoLogPage       from './VideoLogPage';
-import ShopPage           from './ShopPage';
+import VideoHistoryPage   from './VideoHistoryPage';
 import AccountsUIWrapper  from './accounts'
 
 class Navigation extends React.Component {
@@ -34,7 +34,7 @@ class Navigation extends React.Component {
           returnToNav={ this.handleNavigationClick.bind(this, 'nav') }
         />
       );
-    } else if (this.state.page === 'notes') {
+    } else if (this.state.page === 'notes') { 
       return (
         <NotesPage user={this.props.user} notes={this.props.notes} returnToNav={ this.handleNavigationClick.bind(this, 'nav') } />
       );
@@ -48,9 +48,9 @@ class Navigation extends React.Component {
       return (
         <VideoLogPage returnToNav={ this.handleNavigationClick.bind(this, 'nav') } />
       );
-    } else if (this.state.page === 'shop') {
+    } else if (this.state.page === 'videoHistory') {
       return (
-        <ShopPage returnToNav={ this.handleNavigationClick.bind(this, 'nav') } />
+        <VideoHistoryPage returnToNav={ this.handleNavigationClick.bind(this, 'nav') } videos={this.props.videos} />
       );
     } else {
       return (
@@ -64,6 +64,8 @@ class Navigation extends React.Component {
             <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >Review Notes</div>
             <div onClick={ this.handleNavigationClick.bind(this, 'videoLog') } >Video History</div>
             <div onClick={ this.handleNavigationClick.bind(this, 'shop') } >Shop </div>
+            <div onClick={ this.handleNavigationClick.bind(this, 'videoHistory') } >Video History </div>
+            <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >View all notes</div>
           </div>
         </div>
       )

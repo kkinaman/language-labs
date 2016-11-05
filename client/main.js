@@ -12,6 +12,9 @@ import { Mongo } from 'meteor/mongo';
 export const Notes = new Mongo.Collection('notes');
 Meteor.notes = Notes;
 
+export const Videos = new Mongo.Collection('videos');
+Meteor.videos = Videos;
+
 /* ------------------------- PEER.JS INIT ------------------------- */
 const peer = new Peer({
   key: 'zzak1w02wffuhaor',
@@ -34,9 +37,11 @@ const AppContainer = createContainer(() => {
   const presencesSub = Meteor.subscribe('presences');
   const usersSub     = Meteor.subscribe('users');
   const notesSub     = Meteor.subscribe('notes');
+  const videosSub    = Meteor.subscribe('videos');
   const user         = Meteor.users.findOne(Meteor.userId());
   const userIds      = Meteor.presences.find().map(presence => presence.userId);
   const notes        = Meteor.notes.find();
+  const videos       = Meteor.notes.find();
   const loading      = !usersSub.ready() && !presencesSub.ready() && !notesSub.ready();
   
   const onlineUsers  = Meteor.users.find({ 
@@ -50,12 +55,17 @@ const AppContainer = createContainer(() => {
     userId: {$eq: Meteor.userId()}
   }).fetch();
 
+  const userVideos = Meteor.videos.find({
+    userId: {$eq: Meteor.userId()}
+  }).fetch();
+
   return {
     onlineUsers,
     user,
     loading,
     peer,
-    userNotes
+    userNotes,
+    userVideos
   };
 }, App);
 

@@ -21,7 +21,8 @@ const App = ({
   user, 
   loading,
   peer,
-  userNotes
+  userNotes,
+  userVideos
 }) => {
   if (!loading && user) {
     if (!validateProfile(user, 'profile', 'complete')) {
@@ -39,6 +40,7 @@ const App = ({
           peer={peer}
           user={user}
           notes={userNotes}
+          videos={userVideos}
         />
       );
     }

@@ -9,6 +9,9 @@ var s3 = new AWS.S3();
 export const Notes = new Mongo.Collection('notes');
 Meteor.notes = Notes;
 
+export const Videos = new Mongo.Collection('videos');
+Meteor.videos = Videos;
+
 import { HTTP } from 'meteor/http';
 
 Meteor.startup(function () {
@@ -23,6 +26,10 @@ Meteor.startup(function () {
 
   Meteor.publish('notes', function () {
     return Notes.find({}, {userId: true});
+  });
+
+  Meteor.publish('videos', function () {
+    return Videos.find({}, {userId: true});
   });
 
   Meteor.methods({
@@ -54,10 +61,15 @@ Meteor.startup(function () {
       )
     },
 
-    // 'getVideos'() {
-    //   console.log('yo');
-      
-    // }
+    'addVideos'({url, userId, date}) {
+      Meteor.videos.insert(
+        {
+          'url': url,
+          'userId': userId,
+          'date': date
+        }
+      )
+    }
   });
 
   WebApp.connectHandlers.use("/token", function(req, res, next) {
