@@ -219,8 +219,17 @@ body {
 /*============== NOTES PAGE ===============*/
 
 .notes-page {
+  position: relative;
   h1 {
     text-align: center;
+  }
+
+  select {
+    font-size: 18px;
+    position: absolute;
+    top: 90px;
+    right: 50px;
+    float: right;
   }
 
   .notes-main {

@@ -2,6 +2,7 @@ import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import Media from '../MediaStreamRecorder';
 import { HTTP } from 'meteor/http';
+import _ from 'lodash';
 
 class Transcriber extends React.Component {
   constructor(props) {
@@ -12,14 +13,24 @@ class Transcriber extends React.Component {
       selectedTranscript: {},
       hasTranscriptions: false,
       listening: false,
-      sourceLang: 'en',
-      sourceLangName: "English",
-      targetLang: "es",
-      targetLangName: "Spanish",
+      sourceLang: this._getLanguageCodeByName(this.props.user.profile.language),
+      sourceLangName: _.capitalize(this.props.user.profile.language),
+      targetLang: this._getLanguageCodeByName(this.props.user.profile.learning),
+      targetLangName: _.capitalize(this.props.user.profile.learning),
       mediaRecorder: {},
       stream: {},
       ws: {}
     }
+  }
+
+  _getLanguageCodeByName(language) {
+    languageCodes = {
+      'English': 'en',
+      'Spanish': 'es',
+      'French': 'fr',
+      'German': 'de'
+    };
+    return languageCodes[_.capitalize(language)];
   }
 
   //Open websocket with URL, set appropriate event listeners and feed in data stream
@@ -89,8 +100,8 @@ class Transcriber extends React.Component {
 
     // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
     // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
-    // xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
-    xhttp.open("GET", "http://localhost:3000/token", true);
+    xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
+    // xhttp.open("GET", "http://localhost:3000/token", true);
     
     xhttp.onreadystatechange = function () {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
@@ -219,6 +230,7 @@ class Transcriber extends React.Component {
   }
 
   saveTranscript() {
+    this.clearSelection();
     if (Object.keys(this.state.selectedTranscript).length) {
       var sourceLang = this.state.sourceLangName.toLowerCase();
       var targetLang = this.state.targetLangName.toLowerCase();
@@ -240,7 +252,7 @@ class Transcriber extends React.Component {
 
   selectTranscript(event) {
     $clicked = $(event.currentTarget);
-    $clicked.closest('table')[0].childNodes.forEach(row => $(row).removeClass('selected'));
+    this.clearSelection();
     $clicked.addClass('selected');
     var native = $clicked.find('.native-transcript')[0].innerHTML;
     var learning = $clicked.find('.learning-transcript')[0].innerHTML;
@@ -260,13 +272,17 @@ class Transcriber extends React.Component {
     });
   }
 
+  clearSelection() {
+    $('.transcriptionTable')[0].childNodes.forEach(row => $(row).removeClass('selected'));
+  }
+
   render() {
     return (
       <div className='transcriptionContent'>
         <div className='transcriptions'>
           {
             this.state.hasTranscriptions ? (
-              <table>
+              <table className='transcriptionTable'>
                 {
                   this.state.transcriptions.map(transcript => (
                     <tr onClick={this.selectTranscript.bind(this)}>

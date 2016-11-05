@@ -166,7 +166,7 @@ class Dashboard extends React.Component {
             </div>
           </div>
           <div className='bottomLeft shadowbox'>
-            <Transcriber/>  
+            <Transcriber user={this.props.user}/>  
           </div>
         </div>
         <div className='right'>
