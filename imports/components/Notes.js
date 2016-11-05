@@ -1,6 +1,7 @@
 import React from 'react';
 import { Meteor } from 'meteor/meteor';
 import InlineEdit from 'react-edit-inline';
+import _ from 'lodash';
 
 class Notes extends React.Component {
   constructor(props) {
@@ -103,10 +104,10 @@ class Notes extends React.Component {
             <form>
               <label >Add a flashcard</label><br/>
               <div className='inputs'>
-                <input placeholder={this.props.user.profile.language} 
+                <input placeholder={_.capitalize(this.props.user.profile.language)} 
                         value={this.state.nativeText} 
                         onChange={this.nativeTextChanged.bind(this)}/>
-                <input placeholder={this.props.user.profile.learning} 
+                <input placeholder={_.capitalize(this.props.user.profile.learning)} 
                         value={this.state.learningText}
                         onChange={this.learningTextChanged.bind(this)}/>
               </div>
@@ -162,8 +163,8 @@ class FlashcardsList extends React.Component {
       <table>
         <thead>
           <tr>
-            <th>{this.props.user.profile.language}</th>
-            <th>{this.props.user.profile.learning}</th>
+            <th>{_.capitalize(this.props.user.profile.language)}</th>
+            <th>{_.capitalize(this.props.user.profile.learning)}</th>
           </tr>
         </thead>
         <tbody>

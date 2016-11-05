@@ -25,6 +25,14 @@ body {
   display: none;
 }
 
+.shadowbox {
+  border-radius: 4px;
+  box-shadow: $shadow;
+  background-color: white;
+}
+
+/*============== HOME PAGE ===============*/
+
 .home-page {
   height: 100vh;
   width: 100vw;
@@ -35,7 +43,7 @@ body {
 
   .sign-in {
     position: absolute;
-    right: 240px;
+    right: 125px;
     top: 40px;
   }
 
@@ -44,6 +52,8 @@ body {
     color: white;
   }
 }
+
+/*============== SELECT LANGUAGE (PROFILE SETTINGS FORM) ===============*/
 
 .language-select {
   width: 100vw;
@@ -136,6 +146,8 @@ body {
   }
 }
 
+/*============== PROFILE PAGE ===============*/
+
 .user-profile {
   height: 100%;
   flex: 10;
@@ -204,6 +216,66 @@ body {
   }
 }
 
+/*============== NOTES PAGE ===============*/
+
+.notes-page {
+  h1 {
+    text-align: center;
+  }
+
+  .notes-main {
+    height: 80vh;
+    display: flex;
+    flex: 1;
+    flex-direction: row;
+
+    .notes-container {
+      flex: 1;
+      height: 100%;
+      background-color: #E1EFF8;
+      margin: -10px 10px 20px 20px;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .flashcards-container {
+      flex: 1;
+      height: 100%;
+      background-color: #E1EFF8;
+      margin: -10px 20px 20px 10px;
+      align-items: center;
+      justify-content: center;
+
+      tr:nth-child(odd) td {
+        background-color: #f5f5f5;
+      }
+
+      td {
+        padding-left: 25px;
+        padding-top: 10px;
+      }
+    }
+
+    .notes {
+      margin: 25px;
+      height: 70vh;
+      background-color: white;
+      overflow-y: auto;
+      padding: 10px;
+      padding-top: 20px;
+
+      .note {
+        margin-bottom: 10px;
+        padding-bottom: 10px;
+        border-bottom: 1px solid #eee;
+      }  
+    }
+
+  }
+}
+
+/*============== CONVERSATION PAGE (DASHBOARD) ===============*/
+
 .dashboard {
   width: 100vw;
   height: 100vh;
@@ -220,12 +292,9 @@ body {
 
       .video-box {
         width: 65vw;
-        background-color: white;
         margin: 10px 5px 5px 10px;
         align-items: center;
         justify-content: center;
-        border-radius: 4px;
-        box-shadow: $shadow;
 
         .hidden {
           height: 0px;
@@ -389,9 +458,6 @@ body {
       height: 24vh;
       width: 65vw;
       margin: 5px 5px 10px 10px;
-      box-shadow: $shadow;
-      border-radius: 4px;
-      background-color: white;
 
       .transcriptionContent {
         padding: 5px;
@@ -436,9 +502,6 @@ body {
       flex: 8;
       height: 85vh;
       margin: 10px 10px 5px 5px;
-      border-radius: 4px;
-      box-shadow: $shadow;
-      background-color: white;
 
       .sign-out {
         height: 40px;
@@ -520,9 +583,6 @@ body {
       flex: 1;
       height: 11vh;
       margin: 5px 10px 10px 5px;
-      box-shadow: $shadow;
-      border-radius: 4px;
-      background-color: white;
       display: flex;
       flex-direction: column;
 
@@ -572,6 +632,8 @@ body {
   }
 }
 
+/*============== TABLES ===============*/
+
 table {
   width: 100%;
   table-layout: fixed;
@@ -607,6 +669,8 @@ table {
   }
 }
 
+/*============== BUTTONS ===============*/
+
 .button-wrapper {
   display: flex;
   flex-direction: row;
@@ -629,18 +693,6 @@ table {
       color: white;
     }
   }
-
-  /*#flashcards.selected {
-    background: #3BAF5A;
-    border: #3BAF5A;
-    color: white;
-  }
-
-  #flashcards:hover {
-    background: #3BAF5A;
-    border: #3BAF5A;
-    color: white;
-  }*/
 
   .selected {
     background: $blue;
