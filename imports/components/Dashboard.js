@@ -14,7 +14,6 @@ import NavigationWrapper from './NavigationWrapper';
 
 // initialize AWSbucket with my pwd that should not to server
 AWS.config = new AWS.Config({
-  accessKeyId: 'AKIAJK4R2PIDJYTBTWFA', secretAccessKey: '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', region: 'us-west-1'
 });
 var s3 = new AWS.S3();
 
