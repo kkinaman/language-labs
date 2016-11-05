@@ -141,7 +141,7 @@ class Dashboard extends React.Component {
       <div className='dashboard'>
         <div className='left'>
           <div className='topLeft'>
-            <div className='video-box'>
+            <div className='video-box shadowbox'>
               {!this.state.callDone &&
                 <div className='video-wrapper'>
                   {!this.state.callLoading && !this.state.currentCall &&
@@ -165,16 +165,16 @@ class Dashboard extends React.Component {
               }
             </div>
           </div>
-          <div className='bottomLeft'>
+          <div className='bottomLeft shadowbox'>
             <Transcriber/>  
           </div>
         </div>
         <div className='right'>
-          <div className='topRight'>
+          <div className='topRight shadowbox'>
             <NavigationWrapper returnToNav={ this.props.returnToNav } />
             <Notes notes={this.props.notes} user={this.props.user}/>
           </div>
-          <div className='bottomRight'>
+          <div className='bottomRight shadowbox'>
             <div className='waiting-button-wrapper'>
               {!this.props.onlineUsers[0] &&
                 <button>Waiting</button>
@@ -198,27 +198,3 @@ class Dashboard extends React.Component {
 }
 
 export default Dashboard;
-
-/*
-<div className='selected-language'>
-              Selected Languages
-            </div>
-            <div className='language'>
-              {
-               `${this.props.user.profile.language} / 
-                ${this.props.user.profile.learning}`
-              }
-            </div>
-          */
-
- // { 
- //              this.state.partner &&
- //              <div className='clock-suggestion-wrapper'>
- //                <Clock partner={this.state.partner} callDone={this.state.callDone} />
- //                <TopicSuggestion partner={this.state.partner}/>
- //              </div>
- //            }
- // {
- //              !this.state.partner &&
- //              <div className='waiting-for-match'>Waiting for match...</div>
- //            }

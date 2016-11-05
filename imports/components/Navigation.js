@@ -3,6 +3,7 @@ import { Meteor }         from 'meteor/meteor';
 import Dashboard          from './Dashboard';
 import NotesPage          from './NotesPage';
 import ProfilePage        from './ProfilePage';
+import VideoLogPage       from './VideoLogPage';
 import ShopPage           from './ShopPage';
 import AccountsUIWrapper  from './accounts'
 
@@ -35,13 +36,17 @@ class Navigation extends React.Component {
       );
     } else if (this.state.page === 'notes') {
       return (
-        <NotesPage returnToNav={ this.handleNavigationClick.bind(this, 'nav') } />
+        <NotesPage user={this.props.user} notes={this.props.notes} returnToNav={ this.handleNavigationClick.bind(this, 'nav') } />
       );
     } else if (this.state.page === 'profile') {
       return (
        <ProfilePage returnToNav={ this.handleNavigationClick.bind(this, 'nav') }
         user={ this.props.user }
         />
+      );
+    } else if (this.state.page === 'videoLog') {
+      return (
+        <VideoLogPage returnToNav={ this.handleNavigationClick.bind(this, 'nav') } />
       );
     } else if (this.state.page === 'shop') {
       return (
@@ -56,8 +61,9 @@ class Navigation extends React.Component {
           <div className='navigation-list'>
             <div onClick={ this.handleNavigationClick.bind(this, 'video') } >Start a conversation</div>
             <div onClick={ this.handleNavigationClick.bind(this, 'profile') } >Edit your profile</div>
+            <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >Review Notes</div>
+            <div onClick={ this.handleNavigationClick.bind(this, 'videoLog') } >Video History</div>
             <div onClick={ this.handleNavigationClick.bind(this, 'shop') } >Shop </div>
-            <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >View all notes</div>
           </div>
         </div>
       )
