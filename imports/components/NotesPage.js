@@ -27,6 +27,7 @@ class NotesPage extends React.Component {
             <option value="French">French</option>
             <option value="Spanish">Spanish</option>
             <option value="German">German</option>
+            <option value='English'>English</option>
           </select>
         <div className='notes-main'>
           <div className='notes-container shadowbox'>
@@ -57,6 +58,7 @@ class NotesPage extends React.Component {
                   {
                     this.props.notes.map(note => {
                       if (note.noteType === 'flashcard'  && 
+                        Object.keys(note.text).indexOf(this.props.user.profile.language.toLowerCase()) !== -1 &&
                         Object.keys(note.text).indexOf(this.state.displayedLanguage.toLowerCase()) !== -1) {
                         return (
                           <tr>

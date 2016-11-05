@@ -171,6 +171,7 @@ class FlashcardsList extends React.Component {
           {
             this.props.notes.map(note => {
               if (note.noteType === 'flashcard' && 
+                Object.keys(note.text).indexOf(this.props.user.profile.language.toLowerCase()) !== -1 &&
                 Object.keys(note.text).indexOf(this.props.user.profile.learning.toLowerCase()) !== -1) {
                 return (
                   <tr>
