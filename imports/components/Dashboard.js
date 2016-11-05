@@ -29,7 +29,8 @@ class Dashboard extends React.Component {
       callDone: false,
       callLoading: false,
       partner: false,
-      mediaRecorder: {}
+      mediaRecorder: {},
+      fullBlob: ""
     };
 
     this.startChat.bind(this);
@@ -45,6 +46,7 @@ class Dashboard extends React.Component {
     // get html video elements
     var myVideo = this.refs.myVideo;
     var theirVideo = this.refs.theirVideo;
+    // var recordedVideo = this.refs.recordedVideo;
     
     // get audio/video permissions
     navigator.getUserMedia({ audio: true, video: true }, (stream) => {
@@ -74,20 +76,50 @@ class Dashboard extends React.Component {
         }
       }
 
+      // var fullBlob;
+
+      // var renderVideo = () => {
+      //   var superBuffer = new Blob(fullBlob, {type: 'video/webm'});
+      //   this.refs.myVideo.src = window.URL.createObjectURL(superBuffer);
+      // };
+
       this.state.mediaRecorder.onstop = () => {
         console.log('media recorder closed');
         var fullBlob = new Blob(allBlobs, {type: 'video/webm'});
+        this.setState({fullBlob: fullBlob});
         allBlobs = [];
         console.log('created new blob', fullBlob);
-        var params = {Bucket: "invalidmemories", Key: "arealvid" + fullBlob.size + ".webm", Body: fullBlob};
+        var params = {ACL: "public-read", Bucket: "invalidmemories", Key: "arealvid" + fullBlob.size + ".webm", Body: fullBlob};
+        // var s3AndCb = (params, cb) => {
+        //   s3.upload(params, (err, data) => {
+        //     if (err) {
+        //       console.log('error creating');
+        //       cb(err, null);
+        //     } else {
+        //       console.log('success uploading', data);
+        //       cb(null, data);
+        //     }
+        //   });
+        // };
+        // s3AndCb(params, renderVideo);
+
         s3.upload(params, (err, data) => {
           if (err) {
             console.log('err uploading ', err);
           } else {
             console.log('success uploading', data);
+            // Meteor.call('getVideos');
+            // this.refs.myVideo.src = 
+            // renderVideo();
           }
         });
+
+        console.log('attempting to render');
+        myVideo.src = URL.createObjectURL(fullBlob);
+        console.log('after render');
       }
+
+
 
       // give the current user a peerId and save their streamId
       Meteor.users.update({_id: Meteor.userId()}, {
@@ -181,6 +213,13 @@ class Dashboard extends React.Component {
     });
   }
 
+  renderVideo() {
+    // var superBuffer = new Blob(this.state.fullBlob, {type: 'video/webm'});
+    // this.refs.myVideo.src = window.URL.createObjectURL(superBuffer);
+    console.log('rendered');
+  }
+
+  // dont forget to add review back in
   render() {
     return (
       <div className='dashboard'>
@@ -188,6 +227,7 @@ class Dashboard extends React.Component {
           <div className='topLeft'>
             <div className='video-box shadowbox'>
               {!this.state.callDone &&
+              
                 <div className='video-wrapper'>
                   {!this.state.callLoading && !this.state.currentCall &&
                     <Welcome numMatches={this.props.onlineUsers.length}/>
@@ -195,18 +235,11 @@ class Dashboard extends React.Component {
                   {this.state.callLoading &&
                     <Waiting />
                   }
-                  <video ref='myVideo' id='myVideo' autoPlay='true' 
-                    className={this.state.callLoading ? 'hidden' : null}></video>
-                  <video ref='theirVideo' id='theirVideo' muted='true' autoPlay='true'
+                  <video ref='myVideo' id='myVideo' muted='true' autoPlay='true' 
+                    className={this.state.callLoading}></video>
+                  <video ref='theirVideo' id='theirVideo' autoPlay='true'
                     className={this.state.callLoading ? 'hidden' : null}></video>
                 </div>
-              }
-
-              {!this.state.currentCall && this.state.callDone &&
-                <Review 
-                  partner={this.state.partner}
-                  clearPartner={this.clearPartner.bind(this)}
-                />
               }
             </div>
           </div>
