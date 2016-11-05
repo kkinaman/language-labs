@@ -62,8 +62,6 @@ class Navigation extends React.Component {
             <div onClick={ this.handleNavigationClick.bind(this, 'video') } >Start a conversation</div>
             <div onClick={ this.handleNavigationClick.bind(this, 'profile') } >Edit your profile</div>
             <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >Review Notes</div>
-            <div onClick={ this.handleNavigationClick.bind(this, 'videoLog') } >Video History</div>
-            <div onClick={ this.handleNavigationClick.bind(this, 'shop') } >Shop </div>
             <div onClick={ this.handleNavigationClick.bind(this, 'videoHistory') } >Video History </div>
             <div onClick={ this.handleNavigationClick.bind(this, 'notes') } >View all notes</div>
           </div>
