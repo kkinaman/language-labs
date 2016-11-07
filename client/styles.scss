@@ -278,6 +278,7 @@ body {
         padding-bottom: 10px;
         border-bottom: 1px solid #eee;
       }  
+      
     }
 
   }
@@ -683,6 +684,7 @@ table {
 .button-wrapper {
   display: flex;
   flex-direction: row;
+  position: relative;
 
   button {
     font-weight: 700;
@@ -712,6 +714,8 @@ table {
     color: white;
     background-color: #869191;
     border: 2px solid #869191;
+    position: absolute;
+    /*right: 5px;*/
     
     &:hover {
       background-color: #596869;

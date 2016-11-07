@@ -28,6 +28,7 @@ class NotesPage extends React.Component {
             <option value="Spanish">Spanish</option>
             <option value="German">German</option>
             <option value='English'>English</option>
+            <option value='Chinese'>Chinese</option>
           </select>
         <div className='notes-main'>
           <div className='notes-container shadowbox'>

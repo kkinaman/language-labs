@@ -28,7 +28,8 @@ class Transcriber extends React.Component {
       'English': 'en',
       'Spanish': 'es',
       'French': 'fr',
-      'German': 'de'
+      'German': 'de',
+      'Chinese': 'zh-CHS'
     };
     return languageCodes[_.capitalize(language)];
   }
@@ -100,8 +101,8 @@ class Transcriber extends React.Component {
 
     // We suggest using a session cookie for a minimal validation that request for token is coming from your own client app
     // For commercial apps, you may want to protect the call to get a token behind your own user authentication.
-    xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
-    // xhttp.open("GET", "http://localhost:3000/token", true);
+    // xhttp.open("GET", "https://hrmemories-language-labs.meteorapp.com/token", true);
+    xhttp.open("GET", "http://localhost:3000/token", true);
     
     xhttp.onreadystatechange = function () {
       if (xhttp.readyState == 4 && xhttp.status == 200) {
